@@ -61,10 +61,6 @@ namespace spaceCadet
                 StartCoroutine(DashTimer());
             }
              
-            if(Input.GetButtonDown("Fire1"))
-            {
-                gun.GetComponent<GunBehavior>().useWeapon();
-            }
 
 
 

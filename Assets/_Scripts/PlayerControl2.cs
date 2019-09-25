@@ -7,7 +7,7 @@ public class PlayerControl2 : MonoBehaviour
 {
     public LayerMask collisionMask;
 
-    const float skinWidth = .1f;
+    public float skinWidth = .1f;
     public int horizontalRayCount = 4;
     public int verticalRayCount = 4;
 

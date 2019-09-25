@@ -2,8 +2,6 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <CscToolPath>C:\Program Files\Unity\Hub\Editor\2019.2.0f1\Editor\Data\Tools\RoslynScripts</CscToolPath>
-    <CscToolExe>unity_csc.bat</CscToolExe>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -58,10 +56,7 @@
      <Compile Include="Assets\_Scripts\DynamicCamera.cs" />
      <Compile Include="Assets\_Scripts\PlayerControl2.cs" />
      <Compile Include="Assets\_Scripts\PlayerController.cs" />
-     <Compile Include="Assets\BulletScript.cs" />
-     <Compile Include="Assets\GunBehavior.cs" />
      <Compile Include="Assets\Player.cs" />
-     <Compile Include="Assets\TrailEffectScript.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/humme/Documents/Unity Projects/CapstoneFinal/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

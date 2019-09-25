@@ -384,8 +384,9 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 1280
-  horizontalRayCount: 4
-  verticalRayCount: 4
+  skinWidth: 0.015
+  horizontalRayCount: 10
+  verticalRayCount: 10
 --- !u!114 &298960255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,10 +401,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxJumpHeight: 10
   minJumpHeight: 1
-  timeToJumpApex: 0.5
-  moveSpeed: 14.67
-  fallMultiplier: 2.5
-  lowJumpMultiplier: 2
+  timeToJumpApex: 0.35
+  moveSpeed: 30
+  fallMultiplier: 2
+  lowJumpMultiplier: 4.5
+  jumpBuffMax: 10
+  dashTimerMax: 10
+  dashSpeed: 5
+  input: {x: 0, y: 0}
+  dashDirec: 0
 --- !u!1 &313462237
 GameObject:
   m_ObjectHideFlags: 0
@@ -789,6 +795,7 @@ MonoBehaviour:
   collisionMask:
     serializedVersion: 2
     m_Bits: 0
+  skinWidth: 0.1
   horizontalRayCount: 4
   verticalRayCount: 4
 --- !u!61 &939979874
