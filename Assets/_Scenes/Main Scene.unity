@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 290204722}
   - component: {fileID: 290204721}
   - component: {fileID: 290204725}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,7 +248,6 @@ GameObject:
   - component: {fileID: 298960252}
   - component: {fileID: 298960251}
   - component: {fileID: 298960250}
-  - component: {fileID: 298960248}
   - component: {fileID: 298960253}
   - component: {fileID: 298960249}
   - component: {fileID: 298960254}
@@ -260,27 +259,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!50 &298960248
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 298960247}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 8
-  m_AngularDrag: 0
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!61 &298960249
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -403,6 +381,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d676aff845d9bf46b32a0172f0c0aa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 1280
   horizontalRayCount: 4
   verticalRayCount: 4
 --- !u!114 &298960255
@@ -417,6 +398,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0019ec67e4637ce48a0d09035ddff919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxJumpHeight: 10
+  minJumpHeight: 1
+  timeToJumpApex: 0.5
+  moveSpeed: 14.67
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
 --- !u!1 &313462237
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,6 +786,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d676aff845d9bf46b32a0172f0c0aa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 0
   horizontalRayCount: 4
   verticalRayCount: 4
 --- !u!61 &939979874
