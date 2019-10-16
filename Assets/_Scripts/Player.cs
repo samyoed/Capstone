@@ -66,6 +66,11 @@ public class Player : MonoBehaviour
     public float currVel;
     public Vector3 prevPos; 
 
+    //public List<Transform> shotTargets;
+
+    public GameObject currTarget;
+    private Vector3 currTargetPos;
+
 
     void Start()
     {
@@ -89,6 +94,17 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // if(Input.GetButton("Dash"))
+        // {
+        //     Time.timeScale = 0.1f;
+        // }
+        // else 
+        //     Time.timeScale = 1f;
+
+        //find direction between player and target
+        currTargetPos = currTarget.transform.position;
+        Vector2 dir = (currTargetPos - transform.position).normalized;
+
         if(Input.GetButton("Freeze"))
             isChoosingTime = true;
         else
@@ -99,10 +115,6 @@ public class Player : MonoBehaviour
         {
             currVel = ((transform.position - prevPos).magnitude) / Time.deltaTime;
             prevPos = transform.position;
-
-            
-
-
 
             currentDashDirec();
 
@@ -123,6 +135,12 @@ public class Player : MonoBehaviour
                 isDashing = true;
             }
 
+            if(isDashing && (dashDirec == direction.none))
+                GetComponent<FirePart>()._clone_ps_em.enabled = true;
+            else
+                GetComponent<FirePart>()._clone_ps_em.enabled = false;
+
+
             //turn on trail when dashing
             dashTrail();
 
@@ -139,8 +157,7 @@ public class Player : MonoBehaviour
             }
 
             if(controller.collisions.below)
-                currentDashCount = 3;
-
+                currentDashCount = 4;
 
             input = new Vector2(Mathf.Round(Input.GetAxisRaw("Horizontal")), Mathf.Round(Input.GetAxisRaw("Vertical")));
 
@@ -200,8 +217,6 @@ public class Player : MonoBehaviour
                     timeMani.RemoveLast();
                 sampleTimeCurrent = 0;
             }
-
-
         }
         else if(isChoosingTime)
         {

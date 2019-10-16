@@ -33,7 +33,7 @@ public class BallScript : MonoBehaviour
             //magAdd = Vector3.Magnitude(other.gameObject.GetComponent<Rigidbody2D>().velocity);
 
             force.Normalize ();
-            GetComponent<Rigidbody2D> ().AddForce (force * (magAdd), ForceMode2D.Impulse);
+            GetComponent<Rigidbody2D> ().AddForce (force * (mag*magAdd), ForceMode2D.Impulse);
 
             print("hello?");
         }
