@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace spaceCadet
+namespace ballGame
 {
     [RequireComponent(typeof(Camera))]
     public class DynamicCamera : MonoBehaviour
@@ -34,10 +34,9 @@ namespace spaceCadet
         void Move()
         {
             Vector3 centerPoint = GetCenterPoint();
-
             Vector3 newPosition = centerPoint + offset;
-
-            transform.position = Vector3.SmoothDamp(transform.position, newPosition, ref velocity, smoothTime);
+            Vector3 finalPosition = Vector3.SmoothDamp(transform.position, newPosition, ref velocity, smoothTime);
+            transform.position = new Vector3(finalPosition.x, transform.position.y, transform.position.z);
         }
         
         void Zoom()
@@ -55,7 +54,6 @@ namespace spaceCadet
             }
             return bounds.size.x;
         }
-
 
         Vector3 GetCenterPoint()
         {
