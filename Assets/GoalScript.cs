@@ -15,13 +15,15 @@ namespace ballGame
         float currentLerpTime;
         Vector3 startPos;
         
-        int currentPosition = 2; //can either be 1 2 or 3
+        public int currentPosition = 2; //can either be 1 2 or 3
 
         public Vector3 position1;
         public Vector3 position2;
         public Vector3 position3;
 
         public float healthMult = .1f;
+
+        public bool goingUp;
 
         void Start()
         {
@@ -82,41 +84,41 @@ namespace ballGame
             }
         }
 
-        void OnTriggerEnter2D(Collider2D coll)
-        {
-            if(coll.gameObject.CompareTag("Ball"))
-            {
-                Time.timeScale = 0.2f;
-            }
-        }
+        // void OnTriggerEnter2D(Collider2D coll)
+        // {
+        //     if(coll.gameObject.CompareTag("Ball"))
+        //     {
+        //         Time.timeScale = 0.2f;
+        //     }
+        // }
 
-        void OnTriggerExit2D(Collider2D coll)
-        {
-            if(coll.gameObject.CompareTag("Ball"))
-            {
-                Time.timeScale = 1f;
-            }
-            if(coll.gameObject.CompareTag("Weapon"))
-            {
-                if(coll.gameObject.GetComponent<SingleBullet>().isPush)
-                {
-                    if(currentPosition > 1)
-                    {
-                        currentLerpTime = 0;
-                        startPos = transform.position;
-                        currentPosition -= 1;
-                    }
-                }
-                else
-                {
-                    if(currentPosition < 3)
-                    {
-                        currentLerpTime = 0;
-                        startPos = transform.position;
-                        currentPosition += 1;
-                    }
-                }
-            }
-        }
+        // void OnTriggerExit2D(Collider2D coll)
+        // {
+        //     if(coll.gameObject.CompareTag("Ball"))
+        //     {
+        //         Time.timeScale = 1f;
+        //     }
+            // if(coll.gameObject.CompareTag("Weapon"))
+            // {
+            //     if(currentPosition == 1)
+            //         goingUp = true;
+            //     if(currentPosition == 3)
+            //         goingUp = false;
+                
+            //         if(!goingUp)
+            //         {
+            //             currentLerpTime = 0;
+            //             startPos = transform.position;
+            //             currentPosition -= 1;
+            //         }
+            //         if(goingUp)
+            //         {
+            //             currentLerpTime = 0;
+            //             startPos = transform.position;
+            //             currentPosition += 1;
+            //         }
+                
+            // }
+        //}
     }
 }

@@ -39,7 +39,7 @@ public class BackgroundScroll : MonoBehaviour
         transform.position += Vector3.right * (diffX * parallaxSpeed);
         lastCameraX = cameraTransform.position.x;
 
-        transform.position = new Vector3 (transform.position.x, cameraTransform.position.y, transform.position.z);
+        transform.position = new Vector3 (transform.position.x, transform.position.y, transform.position.z);
         if (cameraTransform.position.x < (layers[leftIndex].transform.position.x + viewZone))
             ScrollLeft();
 

@@ -1,39 +1,58 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace ballGame
 {
-   public class BallScript : MonoBehaviour
-   {
-       public bool isHit;
-       public float mag = 25;
-       public float pullMag = 30;
-       public float magAdd;
+    public class BallScript : MonoBehaviour
+    {
+        public bool isHit;
+        public float mag = 25;
+        public float pullMag = 30;
+        public float magAdd;
 
-       public bool isPush;
+        public bool isPush;
 
-       public GameObject player;
+        public GameObject player;
+        public GameObject quad1;
+        public GameObject quad2;
 
-       public ParticleSystem partSys;
-       public Rigidbody2D rb;
+        public ParticleSystem partSys;
+        public Rigidbody2D rb;
 
-       public float maxVelocity = 100f;
+        public Vector3 input;
 
+        public float maxVelocity = 100f;
 
-       public float vel;
+        List<Transform> currentPlayerList;
+        //Transform[] currentPlayerArr;
+        Transform closestPlayer;
+
+        public float vel;
         public float playerMult = .1f;
 
        void Start()
        {
             partSys = gameObject.transform.GetChild(0).GetComponent<ParticleSystem>();
             rb = gameObject.GetComponent<Rigidbody2D>();
+            currentPlayerList = new List<Transform>();
+
+            //gets list of players
+            foreach(Transform child in GameObject.Find("TargetableObjects").transform)
+            {
+                if(child != this.transform)
+                    currentPlayerList.Add(child);
+            }
        }
 
        void FixedUpdate()
        {
            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
            vel = rb.velocity.magnitude;
+           //finds closest player to ball for camera
+           //closestPlayer = GetClosestPlayer(currentPlayerList);
+
        }
 
         void OnCollisionEnter2D (Collision2D other)
@@ -42,57 +61,194 @@ namespace ballGame
             if(other.gameObject.CompareTag("Player"))
             {
                 Player player = other.gameObject.GetComponent<Player>();
-               magAdd = player.currVel;
 
-               Vector3 force = transform.position - other.transform.position;
+                if(player.isDashing)
+                {
+                    switch(player.dashDirec)
+                    {
+                        case direction.up:
+                    input.x = 0; input.y = 1;
+                        break;
+                    case direction.upRight:
+                    input.x = 1; input.y = 1;
+                        break;
+                    case direction.right:
+                    input.x = 1; input.y = 0;
+                        break;
+                    case direction.downRight:
+                    input.x = 1; input.y = -1;
+                        break;
+                    case direction.down:
+                    input.x = 0; input.y = -1;
+                        break;
+                    case direction.downLeft:
+                    input.x = -1; input.y = -1;
+                        break;
+                    case direction.left:
+                    input.x = -1; input.y = 0;
+                        break;
+                    case direction.upLeft:
+                    input.x = -1; input.y = 1;
+                        break;
+                    default:
+                    input.x = 1; input.y = 1;
+                        break;
+                    }
+                    player.input = input;
 
-               force.Normalize ();
-               GetComponent<Rigidbody2D> ().AddForce (force * (mag*magAdd), ForceMode2D.Impulse);
+                    Vector3 force = Vector3.Normalize(input);
+                    //GetComponent<Rigidbody2D> ().AddForce (force * mag, ForceMode2D.Impulse);
+                    GetComponent<Rigidbody2D> ().velocity =  force * mag;
 
-               player.xEdit = -force.x * vel * playerMult;
-               player.yEdit = -force.y * vel * playerMult;
-               player.currentLerpTime = 0;
-               other.gameObject.GetComponent<Rigidbody2D>().AddForce (-force * (mag*magAdd), ForceMode2D.Impulse);
+                    print("SHOOOT");
+                }
+                else
+                {
+                    //for collision with player
+                    magAdd = player.currVel;
+
+                    Vector3 force = transform.position - other.transform.position;
+
+                    force.Normalize ();
+                    GetComponent<Rigidbody2D> ().AddForce (force * (magAdd), ForceMode2D.Impulse);
+
+                    player.xEdit = -force.x * vel * playerMult;
+                    player.yEdit = -force.y * vel * playerMult;
+                    player.currentLerpTime = 0;
+                    //other.gameObject.GetComponent<Rigidbody2D>().AddForce (-force * (mag*magAdd), ForceMode2D.Impulse);
+                }
             }
             if(other.gameObject.CompareTag("Goal"))
             {
-               StartCoroutine(particles());
+               StartCoroutine(particles(other.gameObject.GetComponent<GoalScript>().isTeam1));
+            }
+        }
+   
+        void OnTriggerStay2D(Collider2D other)
+        {
+            if(other.gameObject.CompareTag("Player"))
+            {
+                Player player = other.gameObject.GetComponent<Player>();
+
+                if(player.isDashing)
+                {
+                    switch(player.dashDirec)
+                    {
+                        case direction.up:
+                    input.x = 0; input.y = 1;
+                        break;
+                    case direction.upRight:
+                    input.x = 1; input.y = 1;
+                        break;
+                    case direction.right:
+                    input.x = 1; input.y = 0;
+                        break;
+                    case direction.downRight:
+                    input.x = 1; input.y = -1;
+                        break;
+                    case direction.down:
+                    input.x = 0; input.y = -1;
+                        break;
+                    case direction.downLeft:
+                    input.x = -1; input.y = -1;
+                        break;
+                    case direction.left:
+                    input.x = -1; input.y = 0;
+                        break;
+                    case direction.upLeft:
+                    input.x = -1; input.y = 1;
+                        break;
+                    default:
+                    input.x = 1; input.y = 1;
+                        break;
+                    }
+                    player.input = input;
+
+                    Vector3 force = Vector3.Normalize(input);
+                    //GetComponent<Rigidbody2D> ().AddForce (force * mag, ForceMode2D.Impulse);
+                    GetComponent<Rigidbody2D> ().velocity =  force * mag;
+
+                    print("SHOOOT");
+                }
             }
         }
 
-       void OnTriggerEnter2D (Collider2D other)
+        Transform GetClosestPlayer (List<Transform> players)
         {
-            isHit = false;
+            Transform bestTarget = null;
+            float closestDistanceSqr = Mathf.Infinity;
+            Vector3 currentPosition = transform.position;
+            foreach(Transform potentialTarget in players)
+            {
+                Vector3 directionToTarget = potentialTarget.position - currentPosition;
+                float dSqrToTarget = directionToTarget.sqrMagnitude;
+                if(dSqrToTarget < closestDistanceSqr)
+                {
+                    closestDistanceSqr = dSqrToTarget;
+                    bestTarget = potentialTarget;
+                }
+            }
+     
+            return bestTarget;
         }
-   
+
         void OnTriggerExit2D (Collider2D other)
         {  
             if(other.gameObject.CompareTag("Weapon"))
             {
+                var force = transform.position - other.transform.position;
+                float str = other.gameObject.GetComponent<SingleBullet>().strength;
+    
+                force.Normalize ();
 
-            isHit = true;
-            var force = transform.position - other.transform.position;
-   
-            force.Normalize ();
+			    int pushPull;
+			    if(other.gameObject.GetComponent<SingleBullet>().isPush)
+			    	pushPull = -1;
+			    else
+			    	pushPull = 1;
 
-			int pushPull;
-			if(other.gameObject.GetComponent<SingleBullet>().isPush)
-				pushPull = -1;
-			else
-				pushPull = 1;
-
-           GetComponent<Rigidbody2D> ().AddForce (pushPull * force * mag* 10, ForceMode2D.Impulse);
+                GetComponent<Rigidbody2D> ().AddForce (pushPull * force * str, ForceMode2D.Impulse);
 
 		   }
         }
 
-        IEnumerator particles()
+        IEnumerator particles(bool isTeam1)
         {
             partSys.Play();
-            Time.timeScale = .1f;
+            DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, .1f, .1f);
+
+            
+                if(isTeam1)
+                {
+                    //quad1.SetActive(true);
+                    quad1.GetComponent<shlab2>().reset();
+                    quad1.GetComponent<shlab2>().isHit = true;
+                }
+                else
+                {
+                    //quad2.SetActive(true);
+                    quad2.GetComponent<shlab2>().reset();
+                    quad2.GetComponent<shlab2>().isHit = true;
+                }
+            
             yield return new WaitForSeconds(.0005f*vel);
             partSys.Stop();
-            Time.timeScale = 1f;
+            DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, 1f, .1f);
+
+            
+                if(isTeam1)
+                {
+                    //quad1.SetActive(false);
+                    quad1.GetComponent<shlab2>().reset();
+                    quad1.GetComponent<shlab2>().isHit = false;
+                }
+                else
+                {
+                    //quad2.SetActive(false);
+                    quad2.GetComponent<shlab2>().reset();
+                    quad2.GetComponent<shlab2>().isHit = false;
+                }
+            
         }
     }
 }

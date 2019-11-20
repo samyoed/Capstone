@@ -22,7 +22,6 @@ public class shlabScript : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            
             StartCoroutine(slowMo());
         }
 

@@ -17,6 +17,8 @@ namespace ballGame
         public float zoomLimiter = 50f;
         private Camera cam;
 
+        public Vector3 finalFinalPosition;
+
         void Start()
         {
             cam = GetComponent<Camera>();
@@ -36,7 +38,8 @@ namespace ballGame
             Vector3 centerPoint = GetCenterPoint();
             Vector3 newPosition = centerPoint + offset;
             Vector3 finalPosition = Vector3.SmoothDamp(transform.position, newPosition, ref velocity, smoothTime);
-            transform.position = new Vector3(finalPosition.x, transform.position.y, transform.position.z);
+            finalFinalPosition = new Vector3(finalPosition.x, transform.position.y, transform.position.z);
+            transform.position = finalFinalPosition;
         }
         
         void Zoom()

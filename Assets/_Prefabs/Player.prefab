@@ -4768,10 +4768,10 @@ GameObject:
   - component: {fileID: 3071533311511036703}
   - component: {fileID: 3071533311511036702}
   - component: {fileID: 3071533311511036897}
-  - component: {fileID: 3071533311511036896}
   - component: {fileID: 3071533311511036898}
   - component: {fileID: 4163922838627798776}
   - component: {fileID: 8862334127343456966}
+  - component: {fileID: 2818094233029467549}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -4907,7 +4907,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionMask:
     serializedVersion: 2
-    m_Bits: 1280
+    m_Bits: 256
   skinWidth: 0.015
   horizontalRayCount: 10
   verticalRayCount: 10
@@ -4931,17 +4931,17 @@ MonoBehaviour:
   lowJumpMultiplier: 4.5
   velocity: {x: 0, y: 0, z: 0}
   jumpBuffMax: 15
+  dashBuffMax: 10
   dashTimerMax: 15
-  dashSpeed: 50
+  dashSpeed: 60
   dashTempSpeed: 0
   isDashing: 0
   currentDashCount: 0
-  dashNum: 4
+  dashNum: 2
   input: {x: 0, y: 0}
   dashDirec: 0
+  direc: 0
   partsys: {fileID: 3071533311483362162}
-  timeSampleRate: 50
-  sampleTime: 0.1
   isChoosingTime: 0
   tWarpTimer: 0
   tWarpTimerMax: 5
@@ -4963,7 +4963,8 @@ MonoBehaviour:
   editAccel: 10
   edit: {x: 0, y: 0, z: 0}
   tempEdit: {x: 0, y: 0, z: 0}
-  lerpTime: 0.5
+  bulletMult: 10
+  lerpTime: 1
   currentLerpTime: 0
   ghost: {fileID: 0}
 --- !u!50 &3071533311511036897
@@ -4987,22 +4988,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &3071533311511036896
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3071533311511036694}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 2.054628
 --- !u!114 &3071533311511036898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5017,13 +5002,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 5714264193206230855, guid: edeccf3f97d8f834c9017b97a1412c8c,
     type: 3}
-  speed: 3000
+  speed: 500
   isPush: 0
+  bulletStr: 10
   color: {r: 0, g: 0, b: 0, a: 0}
   player: {fileID: 0}
   currentTarget: {fileID: 0}
-  targetList: []
+  currentTargetList: []
   currentTargetIndex: 0
+  shootTime: 0
+  shootTimeMax: 0.1
+  canShoot: 0
+  offset: {x: 0, y: 0, z: 0}
 --- !u!114 &4163922838627798776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5053,6 +5043,22 @@ MonoBehaviour:
   ghostDelay: 0.01
   ghost: {fileID: 4079246884305158293}
   makeGhost: 0
+--- !u!58 &2818094233029467549
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3071533311511036694}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 3
 --- !u!1 &4079246884305158293
 GameObject:
   m_ObjectHideFlags: 0
@@ -5066,7 +5072,7 @@ GameObject:
   - component: {fileID: 3098647950526600636}
   m_Layer: 0
   m_Name: Ghost
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

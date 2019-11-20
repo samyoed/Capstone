@@ -144,10 +144,12 @@ MonoBehaviour:
   isTeam1: 0
   moveDist: 20
   lerpTime: 0.6
+  currentPosition: 2
   position1: {x: 0, y: 0, z: 0}
   position2: {x: 0, y: 0, z: 0}
   position3: {x: 0, y: 0, z: 0}
-  healthMult: 0.1
+  healthMult: 0.4
+  goingUp: 0
 --- !u!70 &2359576322356251969
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

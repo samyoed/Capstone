@@ -7,6 +7,8 @@ namespace ballGame
     public class SingleBullet : MonoBehaviour
     {
         public bool isPush;
+        public float strength;
+        public GameObject currentPlayer;
         ParticleSystem partSys;
 
         void Awake()
@@ -20,15 +22,11 @@ namespace ballGame
                 StartCoroutine(particles());
         }
 
-
-
         IEnumerator particles()
         {
             partSys.Play();
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(.01f);
             partSys.Stop();
-
-
         }    
     }
 

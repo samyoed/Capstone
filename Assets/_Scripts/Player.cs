@@ -7,7 +7,6 @@ namespace ballGame
     [RequireComponent(typeof(PlayerControl2))]
     public class Player : MonoBehaviour
     {
-
         public float maxJumpHeight = 4;
         public float minJumpHeight = 1;
         public float timeToJumpApex = .4f;
@@ -27,9 +26,12 @@ namespace ballGame
         float velocityXSmoothing;
 
         PlayerControl2 controller;
+        SpriteRenderer sr;
 
         float jumpBuffCount = 0;
         public float jumpBuffMax = 10f;
+        float dashBuffCount = 0;
+        public float dashBuffMax = 10f;
 
         float dashTimer = 0;
         public float dashTimerMax = 10f;
@@ -42,6 +44,7 @@ namespace ballGame
 
         public Vector2 input;
         public direction dashDirec;
+        public direction direc;
 
         //Time warp setup
         public GameObject partsys;
@@ -52,9 +55,9 @@ namespace ballGame
         public LinkedListNode<Vector3> current;
 
         //public Transform player;
-        public int timeSampleRate = 50; //how many samples are able to be stored
-        public float sampleTime = .1f; //amount of time between each sample
-        float sampleTimeCurrent = 0;
+        // public int timeSampleRate = 50; //how many samples are able to be stored
+        // public float sampleTime = .1f; //amount of time between each sample
+        // float sampleTimeCurrent = 0;
         public bool isChoosingTime = false;
 
 
@@ -89,27 +92,23 @@ namespace ballGame
         public float editAccel = 1;
         public Vector3 edit;
         public Vector3 tempEdit;
+        //controls how strong the bullets are
+        public float bulletMult;
 
-        
         public float lerpTime = .5f;
         public float currentLerpTime;
 
-        public enum direction
-        { up, upRight, right, downRight, down, downLeft, left, upLeft, none }
-
-
         public GhostScript ghost;
-
 
         void Start()
         {
             controller = GetComponent<PlayerControl2>();
+            sr = GetComponent<SpriteRenderer>();
 
             gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
             jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
             //minJumpVelocity = Mathf.Sqrt(2*Mathf.Abs(gravity) * minJumpHeight);
             print ("Gravity:" + gravity + "jumpVelocity" + jumpVelocity);
-
 
             fastGrav = gravity*fastGravMult;
             normGravTemp = gravity;
@@ -121,12 +120,8 @@ namespace ballGame
 
         void Update()
         {
-            if(!isChoosingTime)
-            {
                 currVel = ((transform.position - prevPos).magnitude) / Time.deltaTime;
                 prevPos = transform.position;
-
-                currentDashDirec();
 
                 //limits time in air
                 isDashing = false;
@@ -141,30 +136,41 @@ namespace ballGame
                     if(Mathf.Abs(input.x) + Mathf.Abs(input.y) != 2)
                         dashTempSpeed = dashSpeed*Mathf.Sqrt(2);
 
+                    //calculateDashDirec();
                     velocity = (new Vector3(input.x, input.y, 0)) * dashTempSpeed;
                     isDashing = true;
                 }
 
-                
-
+                if(currentDashCount == 0)
+                    sr.color = Color.black;
+                else  
+                    sr.color = Color.white;
+                    
                 //dashes when button is pressed and there are dashes available
-                if(Input.GetButtonDown(actionInput) && currentDashCount > 0 && !controller.collisions.below && !isDashing)
+                //if(Input.GetButtonDown(actionInput) && currentDashCount > 0 && !controller.collisions.below && !isDashing)
+                // if(Input.GetButtonDown(actionInput) && currentDashCount > 0 && !isDashing && dashDirec != direction.none)
+                // {
+                //     dashTimer = 0;
+                //     currentDashCount--;
+                //     //direc = dashDirec;
+                // }
+                if(Input.GetButtonDown(actionInput))
+                    dashBuffCount = 0;
+                else if(Input.GetButtonDown(actionInput))
                 {
-                    dashTimer = 0;
-                    currentDashCount--;
+                    jumpBuffCount = 0;
                 }
 
                 if((controller.collisions.above || controller.collisions.below) && isDashing == false)
                 {
-                velocity.y = 0;
+                    velocity.y = 0;
                 }
 
                 if(controller.collisions.below)
-                    currentDashCount = 4;
+                    currentDashCount = 2;
 
                 input = new Vector2(Mathf.Round(Input.GetAxisRaw(horizInput)), Mathf.Round(Input.GetAxisRaw(vertInput)));
-
-
+                
                 //jump buffer system
                 if(jumpBuffCount < (jumpBuffMax/100))
                 {
@@ -172,11 +178,18 @@ namespace ballGame
                     if(controller.collisions.below)
                     {
                         velocity.y = jumpVelocity;
-
                     }
                 }
-                if(Input.GetButtonDown(actionInput))
-                    jumpBuffCount = 0;
+                if(dashBuffCount < (dashBuffMax/100))
+                {
+                    dashBuffCount+= Time.deltaTime;
+                    if(currentDashCount > 0 && !isDashing && dashDirec != direction.none)
+                    {
+                        dashTimer = 0;
+                        currentDashCount--;
+                    }
+                }
+                
 
                 if (velocity.y < 0) 
     		        velocity.y += gravity  * (fallMultiplier - 1) * Time.deltaTime;
@@ -201,19 +214,15 @@ namespace ballGame
                 
                 tempEdit = new Vector3(xEdit, yEdit, 0);
 
-
                 currentLerpTime += Time.deltaTime;
                 if (currentLerpTime > lerpTime) 
                 {
                     currentLerpTime = lerpTime;
                 }
                 float t = currentLerpTime / lerpTime;
-                t = t*t*t * (t * (6f*t - 15f) + 10f);
+                //t = t*t*t * (t * (6f*t - 15f) + 10f);
                 
                 edit = Vector3.Lerp(tempEdit, Vector3.zero, t);
-
-
-
 
                 //smooths x movement and overall x movement
                 float targetVelocityX = input.x * moveSpeed;
@@ -234,17 +243,71 @@ namespace ballGame
                 if(!isFacingRight)
                     transform.localScale = new Vector3(-currentScale.x, currentScale.y, currentScale.z);
 
-                
-            }
-
         }
 
         void FixedUpdate()
         {
             //turn on trail when dashing
                 dashTrail();
+                currentDashDirec();
         }
 
+        void OnTriggerExit2D (Collider2D other)
+        {  
+            if(other.gameObject.CompareTag("Weapon") && other.gameObject.GetComponent<SingleBullet>().currentPlayer != gameObject)
+            {
+                var force = transform.position - other.transform.position;
+                float str = other.gameObject.GetComponent<SingleBullet>().strength;
+    
+                force.Normalize ();
+
+			    int pushPull;
+			    if(other.gameObject.GetComponent<SingleBullet>().isPush)
+			    	pushPull = -1;
+			    else
+			    	pushPull = 1;
+
+                Vector3 bulletVec = (pushPull * force);
+                xEdit = bulletVec.x;
+                yEdit = bulletVec.y;
+                currentLerpTime = 0;
+                print("hello");
+
+		   }
+        }
+
+        void calculateDirec()
+        {
+            switch(direc)
+            {
+                case direction.up:
+                input.x = 0; input.y = 1;
+                    break;
+                case direction.upRight:
+                input.x = 1; input.y = 1;
+                    break;
+                case direction.right:
+                input.x = 1; input.y = 0;
+                    break;
+                case direction.downRight:
+                input.x = 1; input.y = -1;
+                    break;
+                case direction.down:
+                input.x = 0; input.y = -1;
+                    break;
+                case direction.downLeft:
+                input.x = -1; input.y = -1;
+                    break;
+                case direction.left:
+                input.x = -1; input.y = 0;
+                    break;
+                case direction.upLeft:
+                input.x = -1; input.y = 1;
+                    break;
+                default:
+                    break;
+            }      
+        }
 
         void currentDashDirec()
         {

@@ -15,7 +15,8 @@ public class shlab2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startPos = transform.position;
+        //startPos = transform.position;
+        startPos = new Vector3(0,0,transform.position.z);
     }
 
     // Update is called once per frame
@@ -24,7 +25,7 @@ public class shlab2 : MonoBehaviour
         if(isHit)
         {
             currentLerpTime += Time.deltaTime;
-            if (currentLerpTime > lerpTime) 
+            if (currentLerpTime > lerpTime)
             {
                 currentLerpTime = lerpTime;
             }
@@ -33,8 +34,7 @@ public class shlab2 : MonoBehaviour
 
             transform.position = Vector3.Lerp(new Vector3(startPos.x + offset, startPos.y, startPos.z), startPos, t);
             
-
-            Time.timeScale = 0.2f;
+            //Time.timeScale = 0.2f;
         }else
         {
             currentLerpTime += Time.deltaTime;
@@ -47,7 +47,7 @@ public class shlab2 : MonoBehaviour
 
             transform.position = Vector3.Lerp(startPos, new Vector3(startPos.x + offset, startPos.y, startPos.z), t);
 
-            Time.timeScale = 1f;
+            //Time.timeScale = 1f;
         }
     }
     public void reset()

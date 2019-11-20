@@ -16,7 +16,7 @@ namespace ballGame
         public Text team1;
         public Text team2;
 
-        void Update()
+        void LateUpdate()
         {
             if(team1Health <= 0)
                 team2Win();
@@ -29,11 +29,13 @@ namespace ballGame
 
         void team1Win()
         {
-
+            if(Time.timeScale == 1f)
+                SceneManager.LoadScene("Main Scene");
         }
         void team2Win()
         {
-
+            if(Time.timeScale == 1f)
+                SceneManager.LoadScene("Main Scene");
         }
 
     }
