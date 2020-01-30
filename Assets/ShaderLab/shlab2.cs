@@ -12,11 +12,18 @@ public class shlab2 : MonoBehaviour
         public float offset;
         public bool isHit = false;
 
+        public float ballVelTemp;
+        public float randomTemp=1;
+
+        Renderer rend;
+
     // Start is called before the first frame update
     void Start()
     {
         //startPos = transform.position;
         startPos = new Vector3(0,0,transform.position.z);
+        rend = GetComponent<Renderer>();
+
     }
 
     // Update is called once per frame
@@ -33,8 +40,14 @@ public class shlab2 : MonoBehaviour
             t = t*t*t * (t * (6f*t - 15f) + 10f);
 
             transform.position = Vector3.Lerp(new Vector3(startPos.x + offset, startPos.y, startPos.z), startPos, t);
+
+            float opEdit;
+
+            opEdit = Mathf.Lerp(0, ballVelTemp, t);
             
-            //Time.timeScale = 0.2f;
+
+            rend.material.SetFloat("_Opacity", opEdit);
+            
         }else
         {
             currentLerpTime += Time.deltaTime;
@@ -45,9 +58,15 @@ public class shlab2 : MonoBehaviour
             float t = currentLerpTime / lerpTime;
             t = t*t*t * (t * (6f*t - 15f) + 10f);
 
+            //changing position
             transform.position = Vector3.Lerp(startPos, new Vector3(startPos.x + offset, startPos.y, startPos.z), t);
 
-            //Time.timeScale = 1f;
+            //changing opacity
+            float opEdit;
+
+            opEdit = Mathf.Lerp(ballVelTemp, 0, t);
+
+            rend.material.SetFloat("_Opacity", opEdit);
         }
     }
     public void reset()

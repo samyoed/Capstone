@@ -32,9 +32,9 @@ namespace ballGame
 
         void Start()
         {
-            shoot = GetComponent<Player>().shootInput;
-            change = GetComponent<Player>().changeInput;
-            currentTargetSwitch = GetComponent<Player>().targetSwitchInput;
+            // shoot = GetComponent<Player>().shootInput;
+            // change = GetComponent<Player>().changeInput;
+            // currentTargetSwitch = GetComponent<Player>().targetSwitchInput;
             
             player = GetComponent<Player>();
 
@@ -74,23 +74,24 @@ namespace ballGame
                 canShoot = true;
             }
 
-
-            if(Input.GetButton(shoot))
+            //if special button is pressed and special is available then shoot
+            if(Input.GetButton(shoot) && player.hasSpecial)
             {
                 if(canShoot)
                 {
                     AcquireTargetLock(currentTarget);
                     shootTime = 0;
+                    player.hasSpecial = false;
                 }
                     
             }
 
             //shoot projectile
-            if (Input.GetButtonDown(shoot) && canShoot) 
-            {
-                AcquireTargetLock(currentTarget);
-                shootTime = 0;
-            }
+            // if (Input.GetButtonDown(shoot) && canShoot) 
+            // {
+            //     AcquireTargetLock(currentTarget);
+            //     shootTime = 0;
+            // }
         }
 
         void Fire(Vector3 direc)
@@ -110,8 +111,8 @@ namespace ballGame
             Vector3 currentTargetVelocity = Vector3.zero;
             if(currentTarget.CompareTag("Ball"))
                 currentTargetVelocity = currentTarget.GetComponent<Rigidbody2D>().velocity;
-            if(currentTarget.CompareTag("Player"))
-                currentTargetVelocity = currentTarget.GetComponent<Player>().velocity;
+            // if(currentTarget.CompareTag("Player"))
+            //     currentTargetVelocity = currentTarget.GetComponent<Player>().velocity;
             
                 
             Vector3 direction = CalculateInterceptCourse (currentTarget.transform.position, currentTargetVelocity, transform.position, speed, out acquireTargetLockSuccess);
