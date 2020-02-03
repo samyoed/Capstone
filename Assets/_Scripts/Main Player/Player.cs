@@ -161,34 +161,6 @@ namespace ballGame
                 case state.ATTACK:
 
                     attackTimer ++;
-                   // Vector2 attInput;
-
-                    // if(lockedDashDirec.x == 0 && lockedDashDirec.y == 0 && isFacingRight)
-                    // {
-                    //     attInput = new Vector2(1f,0f);
-                    //     attackTempSpeed = attackSpeed *.8f;
-                    // }
-                    // else if(lockedDashDirec.x == 0 && lockedDashDirec.y == 0 && !isFacingRight)
-                    // {
-                    //     attInput = new Vector2(-1f,0f);
-                    //     attackTempSpeed = attackSpeed *.8f;
-                    // }
-                    // //high jump
-                    // else if(lockedDashDirec.x == 0 && lockedDashDirec.y == 1)
-                    // {
-                    //     attInput = input;
-                    //     attackTempSpeed = attackSpeed*Mathf.Sqrt(2);
-                    // }
-                    // else
-                    // {
-                    //     //for NON diagonal direction
-                    //     if(Mathf.Abs(lockedDashDirec.x) + Mathf.Abs(lockedDashDirec.y) != 2)
-                    //         attackTempSpeed = attackSpeed*Mathf.Sqrt(2);
-                    //     //for diagonal direction
-                    //     else 
-                    //         attackTempSpeed = attackSpeed;
-                    //     attInput = input;
-                    // }
 
                     velocity = (new Vector3(lockedDashDirec.x, lockedDashDirec.y, 0)) * attackSpeed;
 
@@ -207,30 +179,6 @@ namespace ballGame
                 case state.DASH:
                     
                     dashTimer ++;
-                    //Vector2 dashInput;
-
-                    // //low jump
-                    // if(lockedDashDirec.x == 0 && lockedDashDirec.y == 0)
-                    // {
-                    //     dashInput = new Vector2(0f,1f);
-                    //     dashTempSpeed = dashSpeed *.8f;
-                    // }
-                    // //high jump
-                    // else if(lockedDashDirec.x == 0 && lockedDashDirec.y == 1)
-                    // {
-                    //     dashInput = input;
-                    //     dashTempSpeed = dashSpeed*Mathf.Sqrt(2);
-                    // }
-                    // else
-                    // {
-                    //     //for NON diagonal direction
-                    //     if(Mathf.Abs(lockedDashDirec.x) + Mathf.Abs(lockedDashDirec.y) != 2)
-                    //         dashTempSpeed = dashSpeed*Mathf.Sqrt(2);
-                    //     //for diagonal direction
-                    //     else 
-                    //         dashTempSpeed = dashSpeed;
-                    //     dashInput = input;
-                    // }
                     velocity = (new Vector3(lockedDashDirec.x, lockedDashDirec.y, 0)) * dashSpeed;
 
                     gravity = 0;
@@ -246,10 +194,12 @@ namespace ballGame
                 case state.SPECIAL:
 
                     specialTimer ++;
+                    GetComponent<Special>().activateSpecial();
 
                     if(specialTimer > specialTimerMax)
                     {
                         phase = state.DEFAULT;
+                        hasSpecial = false;
                         break;
                     }
                     break;
@@ -269,7 +219,7 @@ namespace ballGame
                         attackTimer = 0;
                         Vector3 circCollRot = Vector3.zero;
 
-                        circColl.transform.GetChild(0).GetComponent<CapsuleCollider2D>().size = new Vector2(5f,8f);
+                        circColl.transform.GetChild(0).GetComponent<CapsuleCollider2D>().size = new Vector2(6f,10f);
 
                         Vector2 roundedInput = new Vector2(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y));
 
@@ -311,7 +261,7 @@ namespace ballGame
                         currentDashCount = dashNum;
 
                         //smooths x movement and overall x movement
-                    float targetVelocityX = input.x * moveSpeed;
+                    float targetVelocityX = Mathf.Round(input.x) * moveSpeed;
                     velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, 
                                                       ref velocityXSmoothing,
                                                      (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
@@ -336,18 +286,6 @@ namespace ballGame
 
         void FixedUpdate()
         {
-            switch(phase)
-            {
-                case state.ATTACK:
-                break;
-                case state.DASH:
-
-
-                
-                break;
-                case state.DEFAULT:
-                break;
-            }
 
 
 

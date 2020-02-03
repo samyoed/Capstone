@@ -81,8 +81,10 @@
      <Compile Include="Assets\_Scripts\Main Player\PlayerControl2.cs" />
      <Compile Include="Assets\_Scripts\Main Player\PlayerController.cs" />
      <Compile Include="Assets\_Scripts\OverallTargetMarkersScript.cs" />
+     <Compile Include="Assets\_Scripts\PersistentData.cs" />
      <Compile Include="Assets\_Scripts\SimpleScreenShake.cs" />
      <Compile Include="Assets\_Scripts\SingleBullet.cs" />
+     <Compile Include="Assets\_Scripts\Special.cs" />
      <Compile Include="Assets\_Scripts\TargetMarkerContainer.cs" />
      <Compile Include="Assets\_Scripts\TargetMarkerScript.cs" />
      <Compile Include="Assets\_Scripts\direction.cs" />
