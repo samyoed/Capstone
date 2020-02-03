@@ -133,40 +133,40 @@ namespace ballGame
 
                 if(player.phase == Player.state.ATTACK)
                 {
-                    switch(player.dashDirec)
-                    {
-                        case direction.up:
-                    input.x = 0; input.y = 1;
-                        break;
-                    case direction.upRight:
-                    input.x = 1; input.y = 1;
-                        break;
-                    case direction.right:
-                    input.x = 1; input.y = 0;
-                        break;
-                    case direction.downRight:
-                    input.x = 1; input.y = -1;
-                        break;
-                    case direction.down:
-                    input.x = 0; input.y = -1;
-                        break;
-                    case direction.downLeft:
-                    input.x = -1; input.y = -1;
-                        break;
-                    case direction.left:
-                    input.x = -1; input.y = 0;
-                        break;
-                    case direction.upLeft:
-                    input.x = -1; input.y = 1;
-                        break;
-                    default:
-                    input.x = 0; input.y = 1;
-                        break;
-                    }
-                    //player.input = input;
+                    // switch(player.dashDirec)
+                    // {
+                    //     case direction.up:
+                    // input.x = 0; input.y = 1;
+                    //     break;
+                    // case direction.upRight:
+                    // input.x = 1; input.y = 1;
+                    //     break;
+                    // case direction.right:
+                    // input.x = 1; input.y = 0;
+                    //     break;
+                    // case direction.downRight:
+                    // input.x = 1; input.y = -1;
+                    //     break;
+                    // case direction.down:
+                    // input.x = 0; input.y = -1;
+                    //     break;
+                    // case direction.downLeft:
+                    // input.x = -1; input.y = -1;
+                    //     break;
+                    // case direction.left:
+                    // input.x = -1; input.y = 0;
+                    //     break;
+                    // case direction.upLeft:
+                    // input.x = -1; input.y = 1;
+                    //     break;
+                    // default:
+                    // input.x = 0; input.y = 1;
+                    //     break;
+                    // }
+                    input = player.input;
 
                     //float dist = Vector3.Distance(player.transform.position, transform.position);
-                    float distDim = player.ballShootDiminisher;
+                    //float distDim = player.ballShootDiminisher;
                     player.hasSpecial = true;
 
                     Vector3 force = Vector3.Normalize(input);

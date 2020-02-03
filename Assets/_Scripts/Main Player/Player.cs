@@ -152,7 +152,7 @@ namespace ballGame
                 sr.color = Color.white;
 
             //input
-            input = new Vector2(Mathf.Round(Input.GetAxisRaw(horizInput)), Mathf.Round(Input.GetAxisRaw(vertInput)));
+            input = new Vector2(Input.GetAxisRaw(horizInput), Input.GetAxisRaw(vertInput));
 
 //-----------------------------STATE MACHINE-------------------------------------------
             switch(phase)
@@ -161,35 +161,36 @@ namespace ballGame
                 case state.ATTACK:
 
                     attackTimer ++;
-                    Vector2 attInput;
+                   // Vector2 attInput;
 
-                    if(lockedDashDirec.x == 0 && lockedDashDirec.y == 0 && isFacingRight)
-                    {
-                        attInput = new Vector2(1f,0f);
-                        attackTempSpeed = attackSpeed *.8f;
-                    }
-                    else if(lockedDashDirec.x == 0 && lockedDashDirec.y == 0 && !isFacingRight)
-                    {
-                        attInput = new Vector2(-1f,0f);
-                        attackTempSpeed = attackSpeed *.8f;
-                    }
-                    //high jump
-                    else if(lockedDashDirec.x == 0 && lockedDashDirec.y == 1)
-                    {
-                        attInput = input;
-                        attackTempSpeed = attackSpeed*Mathf.Sqrt(2);
-                    }
-                    else
-                    {
-                        //for NON diagonal direction
-                        if(Mathf.Abs(lockedDashDirec.x) + Mathf.Abs(lockedDashDirec.y) != 2)
-                            attackTempSpeed = attackSpeed*Mathf.Sqrt(2);
-                        //for diagonal direction
-                        else 
-                            attackTempSpeed = attackSpeed;
-                        attInput = input;
-                    }
-                    velocity = (new Vector3(attInput.x, attInput.y, 0)) * attackTempSpeed;
+                    // if(lockedDashDirec.x == 0 && lockedDashDirec.y == 0 && isFacingRight)
+                    // {
+                    //     attInput = new Vector2(1f,0f);
+                    //     attackTempSpeed = attackSpeed *.8f;
+                    // }
+                    // else if(lockedDashDirec.x == 0 && lockedDashDirec.y == 0 && !isFacingRight)
+                    // {
+                    //     attInput = new Vector2(-1f,0f);
+                    //     attackTempSpeed = attackSpeed *.8f;
+                    // }
+                    // //high jump
+                    // else if(lockedDashDirec.x == 0 && lockedDashDirec.y == 1)
+                    // {
+                    //     attInput = input;
+                    //     attackTempSpeed = attackSpeed*Mathf.Sqrt(2);
+                    // }
+                    // else
+                    // {
+                    //     //for NON diagonal direction
+                    //     if(Mathf.Abs(lockedDashDirec.x) + Mathf.Abs(lockedDashDirec.y) != 2)
+                    //         attackTempSpeed = attackSpeed*Mathf.Sqrt(2);
+                    //     //for diagonal direction
+                    //     else 
+                    //         attackTempSpeed = attackSpeed;
+                    //     attInput = input;
+                    // }
+
+                    velocity = (new Vector3(lockedDashDirec.x, lockedDashDirec.y, 0)) * attackSpeed;
 
                     gravity = 0;
                     if(attackTimer > attackTimerMax)
@@ -206,31 +207,31 @@ namespace ballGame
                 case state.DASH:
                     
                     dashTimer ++;
-                    Vector2 dashInput;
+                    //Vector2 dashInput;
 
-                    //low jump
-                    if(lockedDashDirec.x == 0 && lockedDashDirec.y == 0)
-                    {
-                        dashInput = new Vector2(0f,1f);
-                        dashTempSpeed = dashSpeed *.8f;
-                    }
-                    //high jump
-                    else if(lockedDashDirec.x == 0 && lockedDashDirec.y == 1)
-                    {
-                        dashInput = input;
-                        dashTempSpeed = dashSpeed*Mathf.Sqrt(2);
-                    }
-                    else
-                    {
-                        //for NON diagonal direction
-                        if(Mathf.Abs(lockedDashDirec.x) + Mathf.Abs(lockedDashDirec.y) != 2)
-                            dashTempSpeed = dashSpeed*Mathf.Sqrt(2);
-                        //for diagonal direction
-                        else 
-                            dashTempSpeed = dashSpeed;
-                        dashInput = input;
-                    }
-                    velocity = (new Vector3(dashInput.x, dashInput.y, 0)) * dashTempSpeed;
+                    // //low jump
+                    // if(lockedDashDirec.x == 0 && lockedDashDirec.y == 0)
+                    // {
+                    //     dashInput = new Vector2(0f,1f);
+                    //     dashTempSpeed = dashSpeed *.8f;
+                    // }
+                    // //high jump
+                    // else if(lockedDashDirec.x == 0 && lockedDashDirec.y == 1)
+                    // {
+                    //     dashInput = input;
+                    //     dashTempSpeed = dashSpeed*Mathf.Sqrt(2);
+                    // }
+                    // else
+                    // {
+                    //     //for NON diagonal direction
+                    //     if(Mathf.Abs(lockedDashDirec.x) + Mathf.Abs(lockedDashDirec.y) != 2)
+                    //         dashTempSpeed = dashSpeed*Mathf.Sqrt(2);
+                    //     //for diagonal direction
+                    //     else 
+                    //         dashTempSpeed = dashSpeed;
+                    //     dashInput = input;
+                    // }
+                    velocity = (new Vector3(lockedDashDirec.x, lockedDashDirec.y, 0)) * dashSpeed;
 
                     gravity = 0;
                     if(dashTimer > dashTimerMax)
@@ -257,40 +258,42 @@ namespace ballGame
                      //dashes when button is pressed and there are dashes available
                     if(Input.GetButtonDown(actionInput) && currentDashCount > 0)
                     {
-                        lockedDashDirec = input;
+                        lockedDashDirec = input.normalized;
                         phase = state.DASH;
-                        print("hello?" + Time.time);
                         dashTimer = 0;
                     }
                     if(Input.GetButtonDown(attackInput) && currentDashCount > 0)
                     {
-                        lockedDashDirec = input;
+                        lockedDashDirec = input.normalized;
                         phase = state.ATTACK;
                         attackTimer = 0;
                         Vector3 circCollRot = Vector3.zero;
 
                         circColl.transform.GetChild(0).GetComponent<CapsuleCollider2D>().size = new Vector2(5f,8f);
 
+                        Vector2 roundedInput = new Vector2(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y));
 
-                        if(input.x == 0 && input.y == 0 && isFacingRight)
+
+                        //for 
+                        if(roundedInput.x == 0 && roundedInput.y == 0 && isFacingRight)
                             circCollRot.z = -90f;       //if no direction inputted
-                        else if(input.x == 0 && input.y == 0 && !isFacingRight)
+                        else if(roundedInput.x == 0 && roundedInput.y == 0 && !isFacingRight)
                             circCollRot.z = 90f;
-                        else if(input.x == 0 && input.y == 1)
+                        else if(roundedInput.x == 0 && roundedInput.y == 1)
                             circCollRot.z = 0f;          //if up input
-                        else if(input.x == 1 && input.y == 1)
+                        else if(roundedInput.x == 1 && roundedInput.y == 1)
                             circCollRot.z = -45f;     //if up right input
-                        else if(input.x == 1 && input.y == 0)
+                        else if(roundedInput.x == 1 && roundedInput.y == 0)
                             circCollRot.z = -90f;      //if right input
-                        else if(input.x == 1 && input.y == -1)
+                        else if(roundedInput.x == 1 && roundedInput.y == -1)
                             circCollRot.z = -135f;   //if down right input
-                        else if(input.x == 0 && input.y == -1)
+                        else if(roundedInput.x == 0 && roundedInput.y == -1)
                             circCollRot.z = -180f;        //if down input
-                        else if(input.x == -1 && input.y == -1)
+                        else if(roundedInput.x == -1 && roundedInput.y == -1)
                             circCollRot.z = -225f;    //if down left input
-                        else if(input.x == -1 && input.y == 0)
+                        else if(roundedInput.x == -1 && roundedInput.y == 0)
                             circCollRot.z = -270f;        //if left input
-                        else if(input.x == -1 && input.y == 1)
+                        else if(roundedInput.x == -1 && roundedInput.y == 1)
                             circCollRot.z = -315f;      //if up left input
 
                         circColl.eulerAngles = circCollRot;
