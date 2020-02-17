@@ -4837,6 +4837,7 @@ GameObject:
   - component: {fileID: 4163922838627798776}
   - component: {fileID: 8862334127343456966}
   - component: {fileID: 2818094233029467549}
+  - component: {fileID: 4436942075856993426}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -5005,7 +5006,7 @@ MonoBehaviour:
   attackTempSpeed: 0
   currentDashCount: 0
   dashNum: 3
-  specialTimerMax: 0
+  specialTimerMax: 10
   input: {x: 0, y: 0}
   dashDirec: 0
   direc: 0
@@ -5129,6 +5130,26 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 2.5
+--- !u!114 &4436942075856993426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3071533311511036694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11129cdddaae21b4e91e8826c46919f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thisSpecial: 1
+  projectile: {fileID: 5714264193206230855, guid: edeccf3f97d8f834c9017b97a1412c8c,
+    type: 3}
+  target: {fileID: 0}
+  rigidBody: {fileID: 0}
+  angleChangingSpeed: 0
+  speed: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &4079246884305158293
 GameObject:
   m_ObjectHideFlags: 0

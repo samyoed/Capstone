@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Rewired;
 
 namespace ballGame
 {
@@ -67,7 +68,9 @@ namespace ballGame
         public float currVel;
         public Vector3 prevPos; 
 
-        // custom controls
+        // custom controls\
+        public int playerID;
+        private Rewired.Player playInput;
         public string horizInput;
         public string vertInput;
         public string actionInput;
@@ -104,6 +107,12 @@ namespace ballGame
         public Transform circColl;
 
         public Vector2 lockedDashDirec;
+
+
+        void Awake()
+        {
+            playInput = ReInput.players.GetPlayer(playerID);
+        }
 
         void Start()
         {
@@ -152,7 +161,7 @@ namespace ballGame
                 sr.color = Color.white;
 
             //input
-            input = new Vector2(Input.GetAxisRaw(horizInput), Input.GetAxisRaw(vertInput));
+            input = new Vector2(playInput.GetAxisRaw("Horizontal"), playInput.GetAxisRaw("Vertical"));
 
 //-----------------------------STATE MACHINE-------------------------------------------
             switch(phase)
@@ -266,7 +275,7 @@ namespace ballGame
                                                       ref velocityXSmoothing,
                                                      (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
 
-                    velocity.y += gravity * 1/60;
+                    velocity.y += gravity * Time.deltaTime;
 
                 break;
             }
@@ -280,7 +289,7 @@ namespace ballGame
             }
             
                 
-            controller.Move(velocity /60);
+            controller.Move(velocity *Time.deltaTime);
 
         }
 
@@ -298,27 +307,27 @@ namespace ballGame
 
         void OnTriggerExit2D (Collider2D other)
         {  
-            if(other.gameObject.CompareTag("Weapon") && other.gameObject.GetComponent<SingleBullet>().currentPlayer != gameObject)
-            {
-                var force = transform.position - other.transform.position;
-                float str = other.gameObject.GetComponent<SingleBullet>().strength;
+        //     if(other.gameObject.CompareTag("Weapon") && other.gameObject.GetComponent<SingleBullet>().currentPlayer != gameObject)
+        //     {
+        //         var force = transform.position - other.transform.position;
+        //         float str = other.gameObject.GetComponent<SingleBullet>().strength;
     
-                force.Normalize ();
+        //         force.Normalize ();
 
-			    int pushPull;
-			    if(other.gameObject.GetComponent<SingleBullet>().isPush)
-			    	pushPull = -1;
-			    else
-			    	pushPull = 1;
+		// 	    int pushPull;
+		// 	    if(other.gameObject.GetComponent<SingleBullet>().isPush)
+		// 	    	pushPull = -1;
+		// 	    else
+		// 	    	pushPull = 1;
 
-                Vector3 bulletVec = (pushPull * force*2);
-                xEdit = bulletVec.x;
-                yEdit = bulletVec.y;
-                currentLerpTime = 0;
-                print("hello");
+        //         Vector3 bulletVec = (pushPull * force*2);
+        //         xEdit = bulletVec.x;
+        //         yEdit = bulletVec.y;
+        //         currentLerpTime = 0;
+        //         print("hello");
 
-                tempEdit = new Vector3(xEdit, yEdit, 0);
-		   }
+        //         tempEdit = new Vector3(xEdit, yEdit, 0);
+		//    }
         }
 
         // void dashDimSet()

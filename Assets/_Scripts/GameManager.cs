@@ -11,8 +11,10 @@ namespace ballGame
         public float team1Health;
         public float team2Health;
 
-        //public int team1Points = 0;
-        //public int team2Points = 0;
+        public bool goal1Broken = false;
+        public bool goal2Broken = false;
+
+        public float timeScale;
 
         public int winInt = 3;
 
@@ -23,6 +25,7 @@ namespace ballGame
         {
             Application.targetFrameRate = 60;
         }
+
         void LateUpdate()
         {
             if(PersistentData.team1Points >= winInt)
@@ -30,18 +33,20 @@ namespace ballGame
             if(PersistentData.team2Points >= winInt)
                 team2Win();
 
+            // if(team1Health <= 0 && PersistentData.team1Points < winInt)
+            //     team2Point();
+            // if(team2Health <= 0 && PersistentData.team2Points < winInt)
+            //     team1Point();
 
-            if(team1Health <= 0 && PersistentData.team1Points < winInt)
-                team2Point();
-            if(team2Health <= 0 && PersistentData.team2Points < winInt)
+            if(team1Health <= 0)
                 team1Point();
+            if(team2Health <= 0)
+                team2Point();
 
 
 
             team1.text = "" + team1Health + "/ " + PersistentData.team1Points;
             team2.text = "" + team2Health + "/ " + PersistentData.team2Points;
-
-            
         }
 
         void team1Point()

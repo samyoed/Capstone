@@ -35,22 +35,6 @@ namespace ballGame
             
         }
 
-        void Update()
-        {
-            switch(currentPosition)
-            {
-                case 1:
-                    moveGoal(position1);
-                    break;
-                case 2:
-                    moveGoal(position2);
-                    break;
-                case 3:
-                    moveGoal(position3);
-                    break;
-            }
-        }
-
 
         void scoreEdit(float vel)
         {

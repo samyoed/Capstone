@@ -127,6 +127,7 @@ namespace ballGame
    
         void OnTriggerStay2D(Collider2D other)
         {
+
             if(other.gameObject.name == "Collider")
             {
                 Player player = other.transform.parent.parent.GetComponent<Player>();
@@ -185,15 +186,16 @@ namespace ballGame
                 var force = transform.position - other.transform.position;
                 float str = other.gameObject.GetComponent<SingleBullet>().strength;
     
-                force.Normalize ();
+                // force.Normalize ();
 
-			    int pushPull;
-			    if(other.gameObject.GetComponent<SingleBullet>().isPush)
-			    	pushPull = -1;
-			    else
-			    	pushPull = 1;
+			    // int pushPull;
+			    // // if(other.gameObject.GetComponent<SingleBullet>().isPush)
+			    // // 	pushPull = -1;
+			    // // else
+			    // // 	pushPull = 1;
 
-                GetComponent<Rigidbody2D> ().AddForce (pushPull * force * str, ForceMode2D.Impulse);
+                print("what?");
+                GetComponent<Rigidbody2D> ().AddForce (-force * str);
 		    }
             if(other.gameObject.name == "Collider")
             {
@@ -222,7 +224,7 @@ namespace ballGame
                     quad2.GetComponent<shlab2>().isHit = true;
                 }
             
-            yield return new WaitForSeconds(.0005f*vel);
+            yield return new WaitForSeconds(.0003f*vel);
             partSys.Stop();
             DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, 1f, .1f);
 

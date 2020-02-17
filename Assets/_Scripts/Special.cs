@@ -11,6 +11,17 @@ namespace ballGame
         public special thisSpecial;
 
 
+        //for homing bullets
+        public GameObject projectile;
+        public float strength;
+        private GameObject bullet;
+        public Transform target;
+        public Rigidbody2D rigidBody;
+        public float angleSpeed;
+        public float speed;
+        public Color color;
+
+
         // Update is called once per frame
         public void activateSpecial()
         {
@@ -38,6 +49,15 @@ namespace ballGame
 
         void shoot()
         {
+           
+            bullet = Instantiate(projectile, transform.position, transform.rotation);
+            bullet.GetComponent<SingleBullet>().movementSpeed = speed;
+            bullet.GetComponent<SingleBullet>().angleChangingSpeed = angleSpeed;
+            bullet.GetComponent<SingleBullet>().strength = strength;
+            //bullet.GetComponent<Rigidbody2D>().velocity = direc.normalized * speed; 
+            bullet.GetComponent<TrailRenderer>().startColor = color;
+            bullet.GetComponent<TrailRenderer>().endColor = color;
+            Destroy(bullet, 1);
 
         }
 

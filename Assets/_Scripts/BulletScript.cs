@@ -85,21 +85,14 @@ namespace ballGame
                 }
                     
             }
-
-            //shoot projectile
-            // if (Input.GetButtonDown(shoot) && canShoot) 
-            // {
-            //     AcquireTargetLock(currentTarget);
-            //     shootTime = 0;
-            // }
         }
 
         void Fire(Vector3 direc)
         {
             bullet = Instantiate(projectile, transform.position + offset, transform.rotation);
-            bullet.GetComponent<SingleBullet>().isPush = isPush;
+            //bullet.GetComponent<SingleBullet>().isPush = isPush;
             bullet.GetComponent<SingleBullet>().strength = bulletStr;
-            bullet.GetComponent<SingleBullet>().currentPlayer = gameObject;
+            //bullet.GetComponent<SingleBullet>().currentPlayer = gameObject;
             bullet.GetComponent<Rigidbody2D>().velocity = direc.normalized * speed; 
             bullet.GetComponent<TrailRenderer>().startColor = color;
             bullet.GetComponent<TrailRenderer>().endColor = color;
