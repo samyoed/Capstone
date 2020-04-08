@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 namespace ballGame
@@ -19,10 +20,23 @@ namespace ballGame
 
         public Vector3 finalFinalPosition;
 
+
+
+
         void Start()
         {
+
             cam = GetComponent<Camera>();
             //cam.orthographicSize = 100;
+
+            transform.position = PersistentData.lastSceneCameraPosition;
+        }
+        void Awake()
+        {
+            foreach(Transform child in GameObject.Find("TargetableObjects").transform)
+            {
+                targets.Add(child);
+            }
         }
 
         void LateUpdate()
@@ -38,7 +52,7 @@ namespace ballGame
             Vector3 centerPoint = GetCenterPoint();
             Vector3 newPosition = centerPoint + offset;
             Vector3 finalPosition = Vector3.SmoothDamp(transform.position, newPosition, ref velocity, smoothTime);
-            finalFinalPosition = new Vector3(finalPosition.x, transform.position.y, transform.position.z);
+            finalFinalPosition = new Vector3(finalPosition.x, finalPosition.y, transform.position.z);
             transform.position = finalFinalPosition;
         }
         

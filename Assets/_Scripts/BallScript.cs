@@ -21,6 +21,8 @@ namespace ballGame
 
         public ParticleSystem partSys;
         public Rigidbody2D rb;
+        public GameManager gameManager;
+        public ScoreManager scoreManager;
 
         public Vector3 input;
 
@@ -30,21 +32,29 @@ namespace ballGame
         //Transform[] currentPlayerArr;
         Transform closestPlayer;
 
+
+        public float timeSlowTime = .0009f;
+
         public float vel;
         public float playerMult = .1f;
+
+        public float healthMult;
+
 
        void Start()
        {
             partSys = gameObject.transform.GetChild(0).GetComponent<ParticleSystem>();
             rb = gameObject.GetComponent<Rigidbody2D>();
             currentPlayerList = new List<Transform>();
+            //gameManager = GameObject.FindWithTag("Game Manager").GetComponent<GameManager>();
+            //scoreManager = GameObject.FindWithTag("Score Manager").GetComponent<ScoreManager>();
 
             //gets list of players
-            foreach(Transform child in GameObject.Find("TargetableObjects").transform)
-            {
-                if(child != this.transform)
-                    currentPlayerList.Add(child);
-            }
+            // foreach(Transform child in GameObject.Find("TargetableObjects").transform)
+            // {
+            //     if(child != this.transform)
+            //         currentPlayerList.Add(child);
+            // }
        }
 
        void FixedUpdate()
@@ -53,75 +63,27 @@ namespace ballGame
            vel = rb.velocity.magnitude;
            //finds closest player to ball for camera
            //closestPlayer = GetClosestPlayer(currentPlayerList);
-
        }
 
-        void OnCollisionEnter2D (Collision2D other)
+
+        void OnCollisionEnter2D (Collision2D coll)
         {
-            //ball collision
-            // if(other.gameObject.CompareTag("Player"))
-            // {
-            //     Player player = other.gameObject.GetComponent<Player>();
-
-            //     if(player.isDashing)
-            //     {
-            //         switch(player.dashDirec)
-            //         {
-            //             case direction.up:
-            //         input.x = 0; input.y = 1;
-            //             break;
-            //         case direction.upRight:
-            //         input.x = 1; input.y = 1;
-            //             break;
-            //         case direction.right:
-            //         input.x = 1; input.y = 0;
-            //             break;
-            //         case direction.downRight:
-            //         input.x = 1; input.y = -1;
-            //             break;
-            //         case direction.down:
-            //         input.x = 0; input.y = -1;
-            //             break;
-            //         case direction.downLeft:
-            //         input.x = -1; input.y = -1;
-            //             break;
-            //         case direction.left:
-            //         input.x = -1; input.y = 0;
-            //             break;
-            //         case direction.upLeft:
-            //         input.x = -1; input.y = 1;
-            //             break;
-            //         default:
-            //         input.x = 1; input.y = 1;
-            //             break;
-            //         }
-                    
-
-            //         Vector3 force = Vector3.Normalize(input);
-            //         //GetComponent<Rigidbody2D> ().AddForce (force * mag, ForceMode2D.Impulse);
-            //         GetComponent<Rigidbody2D> ().velocity =  force * mag;
-
-            //         print("SHOOOT");
-            //     }
-            //     else
-            //     {
-            //         //for collision with player
-            //         magAdd = player.currVel;
-
-            //         Vector3 force = transform.position - other.transform.position;
-
-            //         force.Normalize ();
-            //         GetComponent<Rigidbody2D> ().AddForce (force * (magAdd), ForceMode2D.Impulse);
-
-            //         player.xEdit = -force.x * vel * playerMult;
-            //         player.yEdit = -force.y * vel * playerMult;
-            //         player.currentLerpTime = 0;
-            //         //other.gameObject.GetComponent<Rigidbody2D>().AddForce (-force * (mag*magAdd), ForceMode2D.Impulse);
-            //     }
-            // }
-            if(other.gameObject.CompareTag("Goal"))
+            if(coll.gameObject.CompareTag("Goal"))
             {
-               StartCoroutine(particles(other.gameObject.GetComponent<GoalScript>().isTeam1));
+                bool isTeamOne;
+                isTeamOne = coll.transform.GetComponent<GoalScript>().isTeam1;
+
+
+                if(isTeamOne)
+                {
+                    print("we goin?");
+                    gameManager.team1Health -= vel * healthMult;
+                }
+                else
+                    gameManager.team2Health -= vel * healthMult;
+
+                
+                StartCoroutine(particles(isTeamOne));
             }
         }
    
@@ -206,9 +168,14 @@ namespace ballGame
         IEnumerator particles(bool isTeam1)
         {
             partSys.Play();
-            DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, .1f, .1f);
+            if(gameManager.team1Health < 0 || gameManager.team2Health < 0)
+            {
+                scoreManager.reset();
+                timeSlowTime = 0.004f;
+            }
 
-            
+            //DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, .1f, .1f);
+
                 if(isTeam1)
                 {
                     //quad1.SetActive(true);
@@ -224,9 +191,9 @@ namespace ballGame
                     quad2.GetComponent<shlab2>().isHit = true;
                 }
             
-            yield return new WaitForSeconds(.0003f*vel);
+            yield return new WaitForSeconds(timeSlowTime*vel);
             partSys.Stop();
-            DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, 1f, .1f);
+            //DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, 1f, .1f);
 
             
                 if(isTeam1)

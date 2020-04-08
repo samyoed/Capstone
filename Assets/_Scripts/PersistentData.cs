@@ -9,5 +9,7 @@ namespace ballGame
         public static int team1Points;
         public static int team2Points;
 
+        public static Vector3 lastSceneCameraPosition = new Vector3(0,15,-10);
+
     }
 }

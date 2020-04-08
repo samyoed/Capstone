@@ -8,6 +8,9 @@ TagManager:
   - Weapon
   - Ball
   - Goal
+  - Game Manager
+  - Score Manager
+  - Map Manager
   layers:
   - Default
   - TransparentFX

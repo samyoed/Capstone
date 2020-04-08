@@ -6,7 +6,6 @@ namespace ballGame
 {
     public class GoalScript : MonoBehaviour
     {
-
         public GameObject gameManager;
         public bool isTeam1;
         public float moveDist;
@@ -14,8 +13,6 @@ namespace ballGame
         public float lerpTime = 1.25f;
         float currentLerpTime;
         Vector3 startPos;
-        
-        public int currentPosition = 2; //can either be 1 2 or 3
 
         public Vector3 position1;
         public Vector3 position2;
@@ -34,18 +31,6 @@ namespace ballGame
             position3 = new Vector3(transform.position.x, position3.y, position3.z);
             
         }
-
-
-        void scoreEdit(float vel)
-        {
-            if(isTeam1)
-                gameManager.GetComponent<GameManager>().team1Health -= vel*healthMult;
-            else
-                gameManager.GetComponent<GameManager>().team2Health -= vel*healthMult;
-        
-        }
-
-
         void moveGoal(Vector3 position)
         {
             currentLerpTime += Time.deltaTime;
@@ -58,51 +43,5 @@ namespace ballGame
                 
                 transform.position = Vector3.Lerp(startPos, position, t);
         }
-
-        void OnCollisionEnter2D(Collision2D coll)
-        {
-            if(coll.gameObject.CompareTag("Ball"))
-            {
-                float veloc = coll.gameObject.GetComponent<BallScript>().vel * healthMult;
-                scoreEdit(veloc);
-            }
-        }
-
-        // void OnTriggerEnter2D(Collider2D coll)
-        // {
-        //     if(coll.gameObject.CompareTag("Ball"))
-        //     {
-        //         Time.timeScale = 0.2f;
-        //     }
-        // }
-
-        // void OnTriggerExit2D(Collider2D coll)
-        // {
-        //     if(coll.gameObject.CompareTag("Ball"))
-        //     {
-        //         Time.timeScale = 1f;
-        //     }
-            // if(coll.gameObject.CompareTag("Weapon"))
-            // {
-            //     if(currentPosition == 1)
-            //         goingUp = true;
-            //     if(currentPosition == 3)
-            //         goingUp = false;
-                
-            //         if(!goingUp)
-            //         {
-            //             currentLerpTime = 0;
-            //             startPos = transform.position;
-            //             currentPosition -= 1;
-            //         }
-            //         if(goingUp)
-            //         {
-            //             currentLerpTime = 0;
-            //             startPos = transform.position;
-            //             currentPosition += 1;
-            //         }
-                
-            // }
-        //}
     }
 }

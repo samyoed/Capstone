@@ -16,25 +16,16 @@ namespace ballGame
         public state phase;
 
         public float maxJumpHeight = 4;
-        public float minJumpHeight = 1;
         public float timeToJumpApex = .4f;
-        float accelerationTimeAirborne = .2f;
+        float accelerationTimeAirborne = .3f;
         float accelerationTimeGrounded = .1f;
 
         public float moveSpeed = 6;
 
         float gravity;
-        float jumpVelocity;
-        float minJumpVelocity;
-
-        public float fallMultiplier = 2.5f;
-        public float jumpMultiplier = 2f;
 
         Vector3 velocity;
         float velocityXSmoothing;
-
-        PlayerControl2 controller;
-        SpriteRenderer sr;
 
         //moveDash variables
         float dashTimer = 0;
@@ -48,7 +39,7 @@ namespace ballGame
         public float attackTempSpeed = 0;
 
         public int currentDashCount = 0;
-        public int dashNum = 2;
+        private int dashNum = 2;
 
         float specialTimer = 0;
         public float specialTimerMax = 10;
@@ -56,19 +47,13 @@ namespace ballGame
         //attackdash Variables
         public Vector2 input;
         public direction dashDirec;
-        public direction direc;
 
-        public GameObject partsys;
-        public GameObject ball;
-
-        public int fastGravMult;
-        public float fastGrav;
-        public float normGravTemp;
+        private float normGravTemp;
 
         public float currVel;
         public Vector3 prevPos; 
 
-        // custom controls\
+        // custom controls
         public int playerID;
         private Rewired.Player playInput;
         public string horizInput;
@@ -92,19 +77,26 @@ namespace ballGame
         //controls how strong the bullets are
         public float bulletMult;
 
-        public float lerpTime = .5f;
-        public float currentLerpTime;
-
+        //for ghost behind player when dashing
         public GhostScript ghost;
 
         public float ballShootDiminisher;
         public float ballShootDiminisherTemp;
 
         public bool hasSpecial = false;
-        //the radius of the circle collider for hit diminishing
-        //public float circleDiameter;
 
-        public Transform circColl;
+        public Animator _animator;
+
+        //component references
+        private CircleCollider2D _PlayerCircColl;
+        private CapsuleCollider2D _PlayerCapsuleColl;
+        
+        private PlayerControl2 _Controller;
+        private Special _Special;
+        private SpriteRenderer _Sr;
+        public ParticleSystem _PartSys;
+        public GameObject _Ball;
+
 
         public Vector2 lockedDashDirec;
 
@@ -116,25 +108,24 @@ namespace ballGame
 
         void Start()
         {
-            controller = GetComponent<PlayerControl2>();
-            sr = GetComponent<SpriteRenderer>();
-            circColl = gameObject.transform.GetChild(1);
+            _Controller = GetComponent<PlayerControl2>();
+            _Sr = GetComponent<SpriteRenderer>();
+            _PlayerCircColl = transform.GetChild(1).GetChild(0).GetComponent<CircleCollider2D>();
+            _PlayerCapsuleColl = transform.GetChild(1).GetChild(0).GetComponent<CapsuleCollider2D>();
+            _Special = GetComponent<Special>();
+            _PartSys = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>();
+            _Ball = GameObject.Find("Ball");
+            _animator = GetComponent<Animator>();
 
             gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-            jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
-            //minJumpVelocity = Mathf.Sqrt(2*Mathf.Abs(gravity) * minJumpHeight);
-            print ("Gravity:" + gravity + "jumpVelocity" + jumpVelocity);
-
-            //fastGrav = gravity*fastGravMult;
             normGravTemp = gravity;
-
             currentScale = transform.localScale;
-
-            ball = GameObject.Find("Ball");
-            //circleDiameter = circColl.radius*2;
-
+            
+            //initialize timers
             dashTimer = 100;
             attackTimer = 100;
+
+            //initialize phase
             phase = state.DEFAULT;
         }
 
@@ -151,26 +142,23 @@ namespace ballGame
             if(!isFacingRight)
                 transform.localScale = new Vector3(-currentScale.x, currentScale.y, currentScale.z);
 
-
             if(hasSpecial)
-               transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().Play();
+               _PartSys.Play();
 
             if(currentDashCount == 0)
-                sr.color = Color.cyan;
+                _Sr.color = Color.cyan;
             else 
-                sr.color = Color.white;
+                _Sr.color = Color.white;
 
             //input
             input = new Vector2(playInput.GetAxisRaw("Horizontal"), playInput.GetAxisRaw("Vertical"));
 
 //-----------------------------STATE MACHINE-------------------------------------------
             switch(phase)
-            {
-                //----------------------------------ATTACKING---------------------------
+            {   //----------------------------------ATTACKING---------------------------
                 case state.ATTACK:
 
                     attackTimer ++;
-
                     velocity = (new Vector3(lockedDashDirec.x, lockedDashDirec.y, 0)) * attackSpeed;
 
                     gravity = 0;
@@ -179,8 +167,8 @@ namespace ballGame
                         phase = state.DEFAULT;
                         gravity = normGravTemp;
                         currentDashCount--;
-                        circColl.transform.GetChild(0).GetComponent<CircleCollider2D>().enabled = true;
-                        circColl.transform.GetChild(0).GetComponent<CapsuleCollider2D>().enabled = false;
+                        _PlayerCircColl.enabled = true;
+                        _PlayerCapsuleColl.enabled = false;
                         break;
                     }
                     break;
@@ -203,7 +191,7 @@ namespace ballGame
                 case state.SPECIAL:
 
                     specialTimer ++;
-                    GetComponent<Special>().activateSpecial();
+                    _Special.activateSpecial();
 
                     if(specialTimer > specialTimerMax)
                     {
@@ -228,10 +216,9 @@ namespace ballGame
                         attackTimer = 0;
                         Vector3 circCollRot = Vector3.zero;
 
-                        circColl.transform.GetChild(0).GetComponent<CapsuleCollider2D>().size = new Vector2(6f,10f);
+                        _PlayerCapsuleColl.size = new Vector2(6f,10f);
 
                         Vector2 roundedInput = new Vector2(Mathf.RoundToInt(input.x), Mathf.RoundToInt(input.y));
-
 
                         //for 
                         if(roundedInput.x == 0 && roundedInput.y == 0 && isFacingRight)
@@ -255,9 +242,9 @@ namespace ballGame
                         else if(roundedInput.x == -1 && roundedInput.y == 1)
                             circCollRot.z = -315f;      //if up left input
 
-                        circColl.eulerAngles = circCollRot;
-                        circColl.transform.GetChild(0).GetComponent<CapsuleCollider2D>().enabled = true;
-                        circColl.transform.GetChild(0).GetComponent<CircleCollider2D>().enabled = false;
+                        _PlayerCircColl.transform.eulerAngles = circCollRot;
+                        _PlayerCapsuleColl.enabled = true;
+                        _PlayerCircColl.enabled = false;
                     }
                     if(Input.GetButtonDown(specialInput) && hasSpecial)
                     {
@@ -266,39 +253,39 @@ namespace ballGame
                     }
         
                     //regain dashes once colliding with the ground
-                    if(controller.collisions.below)
+                    if(_Controller.collisions.below)
                         currentDashCount = dashNum;
 
                         //smooths x movement and overall x movement
                     float targetVelocityX = Mathf.Round(input.x) * moveSpeed;
                     velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, 
                                                       ref velocityXSmoothing,
-                                                     (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
+                                                     (_Controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
 
-                    velocity.y += gravity * Time.deltaTime;
-
+                    velocity.y += gravity *(1/60f);
                 break;
             }
 
 
 //-----------------------------RUN AFTER EVERY FRAME-------------------------------------
 
-            if((controller.collisions.above || controller.collisions.below))
+            if((_Controller.collisions.above || _Controller.collisions.below))
             {       
                 velocity.y = 0;
             }
             
                 
-            controller.Move(velocity *Time.deltaTime);
+            _Controller.Move(velocity *(1/60f));
+
+//----------------------------ANIMATIONS-------------------------------------------------
+            _animator.SetFloat("Speed", Mathf.Abs(input.x));
+
+
 
         }
 
         void FixedUpdate()
         {
-
-
-
-
             //turn on trail when dashing
             dashTrail();
             currentDashDirec();
@@ -398,11 +385,11 @@ namespace ballGame
         {
             if(phase == state.DASH)
             {
-                partsys.GetComponent<ParticleSystem>().Play();
+                _PartSys.Play();
             }
             else 
             {
-                partsys.GetComponent<ParticleSystem>().Stop();
+                _PartSys.GetComponent<ParticleSystem>().Stop();
             }
         }
 
