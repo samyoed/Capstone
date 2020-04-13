@@ -2,24 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapSide : MonoBehaviour
+namespace ballGame
 {
-    public bool isRight;
-    MapSegment mapSegment;
-    // Start is called before the first frame update
-    void Start()
+    public class MapSide : MonoBehaviour
     {
-        mapSegment = transform.parent.GetComponent<MapSegment>();
-    }
-
-    void OnTriggerEnter2D(Collider2D coll)
-    {
-        if(coll.CompareTag("Ball"))
+        public bool isRight;
+        MapSegment mapSegment;
+        // Start is called before the first frame update
+        void Start()
         {
-            if(isRight)
-                mapSegment.SwitchRight();
-            else
-                mapSegment.SwitchLeft();
+            mapSegment = transform.parent.GetComponent<MapSegment>();
+        }
+
+        void OnTriggerEnter2D(Collider2D coll)
+        {
+            if(coll.CompareTag("Ball"))
+            {
+                //for if its a goal
+                if(mapSegment.isRightGoal && isRight)
+                    mapSegment.scored = true;
+                else if(mapSegment.isLeftGoal && !isRight)
+                    mapSegment.scored = true;
+
+                //if its just a transition
+                else if(!mapSegment.isRightGoal && isRight)
+                    mapSegment.SwitchRight();
+                else if(!mapSegment.isLeftGoal && !isRight)
+                    mapSegment.SwitchLeft();
+            }
         }
     }
 }

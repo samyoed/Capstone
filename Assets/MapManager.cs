@@ -2,65 +2,97 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class MapManager : MonoBehaviour
+namespace ballGame
 {
-    public List<MapSegment> segmentList;
-    public MapSegment currentSegment;
-    
-    int currentIndex;
-
-
-    void Start()
+    public class MapManager : MonoBehaviour
     {
-        //make list of all the map segments
-        MapSegment[] segTempList = GetComponentsInChildren<MapSegment>();
-        foreach(MapSegment mapSeg in segTempList)
-            segmentList.Add(mapSeg);
+        public List<MapSegment> segmentList;
+        public List<List<MapSegment>> mapList;
+        public List<Transform> playerList;
+        public MapSegment currentSegment;
+        public Transform cameraTransform;
+        private Vector3 playerOffset;
 
-        currentIndex = segmentList.Count/2;
-        currentSegment = segmentList[currentIndex];
-    }
+        int currentIndex;
 
-    public void SwitchRight()
-    {
-        if(!currentSegment.isRightGoal)
-            StartCoroutine(SwitchRightCo());
-    }
-    public void SwitchLeft()
-    {
-        if(!currentSegment.isLeftGoal)
-            StartCoroutine(SwitchLeftCo());
-    }
 
-    
+        void Start()
+        {
+            cameraTransform = Camera.main.transform;
+            //make list of all the map segments
+            MapSegment[] segTempList = GetComponentsInChildren<MapSegment>();
+            foreach(MapSegment mapSeg in segTempList)
+                segmentList.Add(mapSeg);
 
-    IEnumerator SwitchLeftCo()
-    {
-        foreach(MapSegment mapSeg in segmentList)
-            foreach(BoxCollider2D boxColl in mapSeg.transform.GetComponentsInChildren<BoxCollider2D>())
-                boxColl.enabled = false;
-        
-        currentIndex--;
-        currentSegment = segmentList[currentIndex];
-        yield return new WaitForSeconds(2);
+            currentIndex = segmentList.Count/2;
+            currentSegment = segmentList[currentIndex];
+        }
 
-        foreach(MapSegment mapSeg in segmentList)
-            foreach(BoxCollider2D boxColl in mapSeg.transform.GetComponentsInChildren<BoxCollider2D>())
-                boxColl.enabled = true;
-    }
+        public void SwitchRight()
+        {
+            if(!currentSegment.isRightGoal)
+                StartCoroutine(SwitchRightCo());
+        }
+        public void SwitchLeft()
+        {
+            if(!currentSegment.isLeftGoal)
+                StartCoroutine(SwitchLeftCo());
+        }
+        void PlayerTeleport()
+        {
+            
 
-    IEnumerator SwitchRightCo()
-    {
-        foreach(MapSegment mapSeg in segmentList)
-            foreach(BoxCollider2D boxColl in mapSeg.transform.GetComponentsInChildren<BoxCollider2D>())
-                boxColl.enabled = false;
-        currentIndex++;
-        currentSegment = segmentList[currentIndex];
-        yield return new WaitForSeconds(2);
+            foreach(Transform player in playerList)
+                player.transform.position = new Vector3(player.position.x - playerOffset.x + cameraTransform.position.x,
+                                                        player.position.y - playerOffset.y + cameraTransform.position.y,
+                                                        player.position.z);
 
-        foreach(MapSegment mapSeg in segmentList)
-            foreach(BoxCollider2D boxColl in mapSeg.transform.GetComponentsInChildren<BoxCollider2D>())
-                boxColl.enabled = true;
-    }
-}
+
+            playerOffset = cameraTransform.position;
+            print("teleport");
+        }
+
+
+        //for the small delay in switching rooms
+        IEnumerator SwitchLeftCo()
+        {
+            foreach(MapSegment mapSeg in segmentList)
+                foreach(Collider2D boxColl in mapSeg.transform.GetComponentsInChildren<BoxCollider2D>())
+                    boxColl.enabled = false;
+
+            currentIndex--;
+            currentSegment = segmentList[currentIndex];
+            yield return new WaitForSeconds(1.5f);
+
+            PlayerTeleport();        //teleporting players to new room
+
+
+            foreach(MapSegment mapSeg in segmentList)
+                foreach(Collider2D boxColl in mapSeg.transform.GetComponentsInChildren<BoxCollider2D>())
+                    boxColl.enabled = true;
+        }
+
+        IEnumerator SwitchRightCo()
+        {
+            foreach(MapSegment mapSeg in segmentList)
+                foreach(Collider2D boxColl in mapSeg.transform.GetComponentsInChildren<BoxCollider2D>())
+                    boxColl.enabled = false;
+            currentIndex++;
+            currentSegment = segmentList[currentIndex];
+
+            yield return new WaitForSeconds(1.5f);
+
+            PlayerTeleport();        //teleporting players to new room
+
+
+            foreach(MapSegment mapSeg in segmentList)
+                foreach(Collider2D boxColl in mapSeg.transform.GetComponentsInChildren<BoxCollider2D>())
+                    boxColl.enabled = true;
+        }
+        IEnumerator SwitchDown()
+        {
+            
+            yield return new WaitForSeconds(2);
+        }
+    }    
+}   

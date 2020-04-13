@@ -73,7 +73,6 @@ namespace ballGame
                 bool isTeamOne;
                 isTeamOne = coll.transform.GetComponent<GoalScript>().isTeam1;
 
-
                 if(isTeamOne)
                 {
                     print("we goin?");
@@ -105,8 +104,6 @@ namespace ballGame
                     Vector3 force = Vector3.Normalize(input);
                     //GetComponent<Rigidbody2D> ().AddForce (force * mag, ForceMode2D.Impulse);
                     GetComponent<Rigidbody2D> ().velocity =  (force * attackMag);
-
-                    print("SHOOOT");
                 }
 
                 if(player.phase == Player.state.DASH)

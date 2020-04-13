@@ -2,26 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapSegment : MonoBehaviour
+namespace ballGame
 {
-    public bool isRightGoal;
-    public bool isLeftGoal;
-    MapManager mapManager; 
-    public BoxCollider2D rightEntry;
-    public BoxCollider2D leftEntry;
-    // Start is called before the first frame update
-    void Start()
+    public class MapSegment : MonoBehaviour
     {
-        mapManager = GameObject.FindWithTag("Map Manager").GetComponent<MapManager>();
-    }
+        public bool isRightGoal;
+        public bool isLeftGoal;
+        MapManager mapManager; 
+        public BoxCollider2D rightEntry;
+        public BoxCollider2D leftEntry;
+        public bool scored;
+        // Start is called before the first frame update
+        void Start()
+        {
+            mapManager = GameObject.FindWithTag("Map Manager").GetComponent<MapManager>();
+        }
 
-    public void SwitchRight()
-    {
-        mapManager.SwitchRight();
-    }
-    public void SwitchLeft()
-    {
-        mapManager.SwitchLeft();
-    }
 
+        public void RightScore()
+        {
+
+        }
+        public void LeftScore()
+        {
+            
+        }
+
+        public void SwitchRight()
+        {
+            mapManager.SwitchRight();
+        }
+        public void SwitchLeft()
+        {
+            mapManager.SwitchLeft();
+        }
+    }
 }
