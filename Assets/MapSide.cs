@@ -7,11 +7,11 @@ namespace ballGame
     public class MapSide : MonoBehaviour
     {
         public bool isRight;
-        MapSegment mapSegment;
+        Room room;
         // Start is called before the first frame update
         void Start()
         {
-            mapSegment = transform.parent.GetComponent<MapSegment>();
+            room = transform.parent.GetComponent<Room>();
         }
 
         void OnTriggerEnter2D(Collider2D coll)
@@ -19,17 +19,20 @@ namespace ballGame
             if(coll.CompareTag("Ball"))
             {
                 //for if its a goal
-                if(mapSegment.isRightGoal && isRight)
-                    mapSegment.scored = true;
-                else if(mapSegment.isLeftGoal && !isRight)
-                    mapSegment.scored = true;
+                if((room.isRightGoal && isRight) || (room.isLeftGoal && !isRight))
+                {
+                    room.scored = true;
+                    room.TeamScore();
+                }
 
                 //if its just a transition
-                else if(!mapSegment.isRightGoal && isRight)
-                    mapSegment.SwitchRight();
-                else if(!mapSegment.isLeftGoal && !isRight)
-                    mapSegment.SwitchLeft();
+                else if(!room.isRightGoal && isRight)
+                    room.SwitchRight();
+                else if(!room.isLeftGoal && !isRight)
+                    room.SwitchLeft();
             }
+
+            print("hello");
         }
     }
 }

@@ -166,7 +166,7 @@ namespace ballGame
                     {
                         phase = state.DEFAULT;
                         gravity = normGravTemp;
-                        currentDashCount--;
+                        //currentDashCount--;
                         _PlayerCircColl.enabled = true;
                         _PlayerCapsuleColl.enabled = false;
                         break;
@@ -209,7 +209,7 @@ namespace ballGame
                         phase = state.DASH;
                         dashTimer = 0;
                     }
-                    if(Input.GetButtonDown(attackInput) && currentDashCount > 0)
+                    if(Input.GetButtonDown(attackInput))
                     {
                         lockedDashDirec = input.normalized;
                         phase = state.ATTACK;

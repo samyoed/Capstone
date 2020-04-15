@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using TMPro;
 
 namespace ballGame
 {
@@ -8,9 +10,12 @@ namespace ballGame
     {
         public int teamLeftScore;
         public int teamRightScore;
+        public Transform mapObject;
         public MapManager mapManager;
-        public List<MapSegment> mapList = new List<MapSegment>();
-        public MapSegment[] goalList = new MapSegment[2];
+        public List<Room> mapList = new List<Room>();
+        public TextMeshProUGUI rightScoreText;
+        public TextMeshProUGUI leftScoreText;
+        int mapObjectIdx = 0;
 
         // Start is called before the first frame update
         void Start()
@@ -18,35 +23,42 @@ namespace ballGame
             Application.targetFrameRate = 60;
 
             mapManager = GameObject.FindWithTag("Map Manager").GetComponent<MapManager>();
+            
 
-
-            foreach(MapSegment mapSeg in mapManager.GetComponentsInChildren<MapSegment>())
-                mapList.Add(mapSeg);
-            foreach(MapSegment mapSeg in mapList)
-                if(mapSeg.isLeftGoal)
-                    goalList[0] = mapSeg;
-                else if(mapSeg.isRightGoal)
-                    goalList[1] = mapSeg;
+            // foreach(Room room in mapObject)
+            //     mapList.Add(room);
             
         }
 
         // Update is called once per frame
         void Update()
         {
-            foreach(MapSegment mapSeg in goalList)
-            {
-                if(mapSeg.isRightGoal && mapSeg.scored)
-                {
-                    teamRightScore++;
-                    mapSeg.scored = false;
-                }
-                if(mapSeg.isLeftGoal && mapSeg.scored)
-                {
-                    teamLeftScore++;
-                    mapSeg.scored = false;
-                }
-            }
+            
+
             
         }
+        public void RightScore()
+        {
+            teamRightScore++;
+            Camera.main.GetComponent<CameraNew>().FadeToBlack();
+            mapManager.initMap();
+            mapObject = mapManager.mapObject;
+            Vector3 mapPosEdit = mapManager.mapObject.transform.position;
+            Vector3 mapAdd = new Vector3(112, 0, 0);
+            mapManager.mapObject.transform.position = mapPosEdit + mapAdd;
+        }
+        public void LeftScore()
+        {
+            teamLeftScore++;
+            Camera.main.GetComponent<CameraNew>().FadeToBlack();
+            mapManager.initMap();
+            mapObject = mapManager.mapObject;
+            Vector3 mapPosEdit = mapManager.mapObject.transform.position;
+            Vector3 mapAdd = new Vector3(-112, 0, 0);
+            mapManager.mapObject.transform.position = mapPosEdit + mapAdd;
+            
+
+        }
+        
     }
 }

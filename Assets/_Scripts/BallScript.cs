@@ -46,6 +46,7 @@ namespace ballGame
             partSys = gameObject.transform.GetChild(0).GetComponent<ParticleSystem>();
             rb = gameObject.GetComponent<Rigidbody2D>();
             currentPlayerList = new List<Transform>();
+
             //gameManager = GameObject.FindWithTag("Game Manager").GetComponent<GameManager>();
             //scoreManager = GameObject.FindWithTag("Score Manager").GetComponent<ScoreManager>();
 
@@ -57,13 +58,13 @@ namespace ballGame
             // }
        }
 
-       void FixedUpdate()
-       {
-           rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
-           vel = rb.velocity.magnitude;
+        void FixedUpdate()
+        {
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
+            vel = rb.velocity.magnitude;
            //finds closest player to ball for camera
            //closestPlayer = GetClosestPlayer(currentPlayerList);
-       }
+        }
 
 
         void OnCollisionEnter2D (Collision2D coll)
@@ -88,11 +89,9 @@ namespace ballGame
    
         void OnTriggerStay2D(Collider2D other)
         {
-
             if(other.gameObject.name == "Collider")
             {
                 Player player = other.transform.parent.parent.GetComponent<Player>();
-
                 if(player.phase == Player.state.ATTACK)
                 {
                     input = player.input;
@@ -108,7 +107,6 @@ namespace ballGame
 
                 if(player.phase == Player.state.DASH)
                 {
-
                     input = player.input;
                     Vector2 force = input.normalized;
                     GetComponent<Rigidbody2D> ().velocity =  GetComponent<Rigidbody2D>().velocity + (force * moveMag);
@@ -118,6 +116,7 @@ namespace ballGame
                 }
             }
         }
+
 
         Transform GetClosestPlayer (List<Transform> players)
         {
