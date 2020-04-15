@@ -256,6 +256,16 @@ PrefabInstance:
       propertyPath: playerID
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3071533311511036702, guid: 870952385131d1948bef3251411edc3c,
+        type: 3}
+      propertyPath: timeToJumpApex
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3071533311511036703, guid: 870952385131d1948bef3251411edc3c,
+        type: 3}
+      propertyPath: collisionMask.m_Bits
+      value: 2304
+      objectReference: {fileID: 0}
     - target: {fileID: 3071533311511036898, guid: 870952385131d1948bef3251411edc3c,
         type: 3}
       propertyPath: color.r
