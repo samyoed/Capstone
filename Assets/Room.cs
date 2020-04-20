@@ -13,6 +13,7 @@ namespace ballGame
         public BoxCollider2D rightEntry;
         public BoxCollider2D leftEntry;
         public bool scored;
+        public bool[] floorNotEmpty = new bool[56];
         
         // Start is called before the first frame update
         void Start()

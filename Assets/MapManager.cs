@@ -15,7 +15,7 @@ namespace ballGame
         public Room currentSegment;
         public Transform cameraTransform;
         public CameraNew virtCam;
-        private Vector3 playerOffset;
+        public Vector3 playerOffset;
 
         int currentIndex;
         int mapObjectIdx = 0;
@@ -35,7 +35,7 @@ namespace ballGame
 
         void Start()
         {
-            
+            virtCam.UpdatePosition();
         }
 
         public void initMap()
@@ -50,6 +50,8 @@ namespace ballGame
             currentIndex = roomList.Count/2;
             currentSegment = roomList[currentIndex];
             mapObjectIdx++;
+            
+
         }
         public void SwitchRight()
         {
@@ -66,11 +68,49 @@ namespace ballGame
         void PlayerTeleport()
         {
             foreach(Transform player in playerList)
-                player.transform.position = new Vector3(player.position.x - playerOffset.x + cameraTransform.position.x,
+            {
+
+
+                float playerXPos = player.position.x - playerOffset.x;
+                // int notEmptyIdxRight = Mathf.RoundToInt(playerXPos + 56)/2;
+                // int notEmptyIdxLeft = notEmptyIdxRight;
+
+                // print("unedited" + notEmptyIdxRight);
+
+                // int rightCount = 0;
+                // int leftCount = 0;
+                // while(currentSegment.floorNotEmpty[notEmptyIdxRight])
+                // {
+                //     rightCount++;
+                //     notEmptyIdxRight++;
+                // }
+                // while(currentSegment.floorNotEmpty[notEmptyIdxLeft])
+                // {
+                //     leftCount++;
+                //     notEmptyIdxLeft--;
+                // }
+                // if(rightCount >= leftCount)
+                // {
+                //     playerXPos = (notEmptyIdxRight - 56)*2;
+                // }
+                // else if(rightCount >= leftCount)
+                // {
+                //     playerXPos = (notEmptyIdxLeft - 56)*2;
+                // }
+
+                // print("edited" + playerXPos);
+
+
+
+                // Vector3 tempPos =  new Vector3(player.position.x - playerOffset.x + cameraTransform.position.x,
+                //                                         player.position.y - playerOffset.y + cameraTransform.position.y,
+                //                                         player.position.z);
+                
+                player.transform.position = new Vector3(playerXPos + cameraTransform.position.x,
                                                         player.position.y - playerOffset.y + cameraTransform.position.y,
                                                         player.position.z);
 
-
+            }
             playerOffset = cameraTransform.position;
             print("teleport");
         }

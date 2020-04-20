@@ -15,6 +15,7 @@ namespace ballGame
         public List<Room> mapList = new List<Room>();
         public TextMeshProUGUI rightScoreText;
         public TextMeshProUGUI leftScoreText;
+        public CameraNew virtCam;
         int mapObjectIdx = 0;
 
         // Start is called before the first frame update
@@ -46,6 +47,7 @@ namespace ballGame
             Vector3 mapPosEdit = mapManager.mapObject.transform.position;
             Vector3 mapAdd = new Vector3(112, 0, 0);
             mapManager.mapObject.transform.position = mapPosEdit + mapAdd;
+            virtCam.UpdatePosition();
         }
         public void LeftScore()
         {
@@ -56,6 +58,7 @@ namespace ballGame
             Vector3 mapPosEdit = mapManager.mapObject.transform.position;
             Vector3 mapAdd = new Vector3(-112, 0, 0);
             mapManager.mapObject.transform.position = mapPosEdit + mapAdd;
+            virtCam.UpdatePosition();
             
 
         }
