@@ -537,7 +537,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 155892999}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 27.64, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 718063551}
@@ -559,6 +559,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapManager: {fileID: 1098555991}
   black: {fileID: 601640645}
+  rightScoreText: {fileID: 0}
+  leftScoreText: {fileID: 0}
 --- !u!114 &155893004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2142,7 +2144,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &991199107
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2189,8 +2191,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -2261,7 +2263,7 @@ MonoBehaviour:
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
   m_isInputParsingRequired: 0
-  m_inputSource: 3
+  m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
   - {fileID: 0}
@@ -2591,7 +2593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1086750266
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2638,8 +2640,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 16777215
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0}
   m_enableVertexGradient: 0
   m_fontColorGradient:
     topLeft: {r: 1, g: 1, b: 1, a: 1}
@@ -2798,6 +2800,7 @@ MonoBehaviour:
   currentSegment: {fileID: 0}
   cameraTransform: {fileID: 0}
   virtCam: {fileID: 1968731769}
+  playerOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &1140370070
 GameObject:
   m_ObjectHideFlags: 0
@@ -2924,6 +2927,7 @@ MonoBehaviour:
   rightEntry: {fileID: 913739591}
   leftEntry: {fileID: 2060366248}
   scored: 0
+  floorNotEmpty: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 --- !u!19719996 &1168707376
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -12826,6 +12830,7 @@ MonoBehaviour:
   rightEntry: {fileID: 1013106150}
   leftEntry: {fileID: 1179148150}
   scored: 0
+  floorNotEmpty: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 --- !u!19719996 &1224056467
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -20107,6 +20112,7 @@ MonoBehaviour:
   rightEntry: {fileID: 1748241414}
   leftEntry: {fileID: 138372349}
   scored: 0
+  floorNotEmpty: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 --- !u!19719996 &1258960043
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -28415,6 +28421,7 @@ MonoBehaviour:
   mapList: []
   rightScoreText: {fileID: 0}
   leftScoreText: {fileID: 0}
+  virtCam: {fileID: 1968731769}
 --- !u!1 &1451397081
 GameObject:
   m_ObjectHideFlags: 0
@@ -28470,6 +28477,7 @@ MonoBehaviour:
   rightEntry: {fileID: 1140370073}
   leftEntry: {fileID: 801225846}
   scored: 0
+  floorNotEmpty: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 --- !u!19719996 &1451397084
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -38647,6 +38655,7 @@ MonoBehaviour:
   rightEntry: {fileID: 816867266}
   leftEntry: {fileID: 837990993}
   scored: 0
+  floorNotEmpty: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 --- !u!19719996 &1614034437
 TilemapCollider2D:
   m_ObjectHideFlags: 0
@@ -46352,7 +46361,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968731765}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 27.64, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1906757410}
@@ -46388,6 +46397,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapManager: {fileID: 0}
   black: {fileID: 601640645}
+  rightScoreText: {fileID: 991199108}
+  leftScoreText: {fileID: 1086750267}
 --- !u!1 &1989680155
 GameObject:
   m_ObjectHideFlags: 0
@@ -54802,6 +54813,7 @@ MonoBehaviour:
   rightEntry: {fileID: 268797648}
   leftEntry: {fileID: 1837540}
   scored: 0
+  floorNotEmpty: 0000000000000000000000000000000001010101010101010101010101010000000000000000000000000000000000000000000000000000
 --- !u!1 &2060366245
 GameObject:
   m_ObjectHideFlags: 0
