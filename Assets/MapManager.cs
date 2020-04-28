@@ -16,8 +16,9 @@ namespace ballGame
         public Transform cameraTransform;
         public CameraNew virtCam;
         public Vector3 playerOffset;
+        public ProgressSlider progressSlider;
 
-        int currentIndex;
+        public int currentIndex;
         int mapObjectIdx = 0;
 
 
@@ -82,25 +83,42 @@ namespace ballGame
 
                 int rightCount = 0;
                 int leftCount = 0;
-                while(currentSegment.floorNotEmpty[notEmptyIdxRight] && notEmptyIdxRight < 55)
+                bool useRight = true;
+                bool specialCase = false;
+                while(currentSegment.floorNotEmpty[notEmptyIdxRight])
                 {
+                    if(notEmptyIdxRight >= 55)
+                    {
+                        useRight = false;
+                        specialCase = true;
+                        break;
+                    }
+
                     rightCount++;
                     notEmptyIdxRight++;
                 }
-                while(currentSegment.floorNotEmpty[notEmptyIdxLeft] && notEmptyIdxLeft > 0)
+                while(currentSegment.floorNotEmpty[notEmptyIdxLeft])
                 {
+                    if(notEmptyIdxLeft <= 0)
+                    {
+                        useRight = true;
+                        specialCase = true;
+                        break;
+                    }
                     leftCount++;
                     notEmptyIdxLeft--;
                 }
-                if(rightCount < leftCount)
+                if(!specialCase)
                 {
+                    if(rightCount < leftCount)
+                        useRight = true;
+                    else
+                        useRight = false;
+                }
+                if(useRight)
                     playerXPos = (notEmptyIdxRight - 28) * 2;
-                }
-                else if(rightCount >= leftCount)
-                {
+                else
                     playerXPos = (notEmptyIdxLeft - 28) * 2;
-                }
-
 
 
                 print("edited" + playerXPos + "\nleft" + notEmptyIdxLeft + "  right" + notEmptyIdxRight);
@@ -127,8 +145,12 @@ namespace ballGame
                     boxColl.enabled = false;
 
             currentIndex--;
+            progressSlider.UpdateSlider(currentIndex);
+            
             currentSegment = roomList[currentIndex];
+            
             yield return new WaitForSeconds(1.5f);
+            print("what?: " + currentIndex);
 
             PlayerTeleport();        //teleporting players to new room
 
@@ -143,7 +165,11 @@ namespace ballGame
             foreach(Room room in roomList)
                 foreach(Collider2D boxColl in room.transform.GetComponentsInChildren<BoxCollider2D>())
                     boxColl.enabled = false;
+
             currentIndex++;
+            progressSlider.UpdateSlider(currentIndex);
+
+
             currentSegment = roomList[currentIndex];
 
             yield return new WaitForSeconds(1.5f);

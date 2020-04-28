@@ -26,7 +26,7 @@ namespace ballGame
         public void UpdatePosition()
         {
             Vector3 newPosition = mapManager.currentSegment.transform.position;
-            print(mapManager.currentSegment.transform.position);
+            //print(mapManager.currentSegment.transform.position);
             newPosition = new Vector3(newPosition.x, newPosition.y, transform.position.z);
             transform.DOLocalMove(newPosition, .75f);
         }

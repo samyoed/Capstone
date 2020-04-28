@@ -1,25 +1,53 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace ballGame
 {
     public class Room : MonoBehaviour
     {
-        public bool isRightGoal;
-        public bool isLeftGoal;
-        MapManager mapManager; 
-        GameManagerNew gameManager;
-        public BoxCollider2D rightEntry;
-        public BoxCollider2D leftEntry;
+        public class TileSingle : MonoBehaviour
+        {
+            int x;
+            int y;
+            bool notEmpty;
+
+            public TileSingle(int X, int Y, bool n)
+            {
+                x = X; y = Y; notEmpty = n;
+            }
+        }
+
+
+        public bool isRightGoal, isLeftGoal;
         public bool scored;
         public bool[] floorNotEmpty = new bool[56];
+
+        public BoxCollider2D rightEntry, leftEntry;
+        MapManager mapManager; 
+        GameManagerNew gameManager;
+
+        Tilemap tilemap;
+        BoundsInt bounds;
+        TileBase[] allTiles;
+        public List<TileSingle> tileList = new List<TileSingle>();
+
+
+
+        
+
         
         // Start is called before the first frame update
         void Start()
         {
             mapManager = GameObject.FindWithTag("Map Manager").GetComponent<MapManager>();
             gameManager = GameObject.FindWithTag("Game Manager").GetComponent<GameManagerNew>();
+            tilemap = GetComponent<Tilemap>();
+            bounds = tilemap.cellBounds;
+            allTiles = tilemap.GetTilesBlock(bounds);
+
+            GetTiles(tileList);
         }
 
         void Update()
@@ -39,6 +67,28 @@ namespace ballGame
             
         }
 
+        void GetTiles(List<TileSingle> tileList)
+        {
+            tilemap.CompressBounds();
+
+            for (int x = 0; x < bounds.size.x; x++) 
+            {
+                for (int y = 0; y < bounds.size.y; y++) 
+                {
+                    TileBase tile = allTiles[x + y * bounds.size.x];
+                    if (tile != null) 
+                    {
+                        tileList.Add(new TileSingle(x, y, true));
+                        Debug.Log("x:" + x + " y:" + y + " tile:" + tile.name);
+                    }
+                    else
+                    { 
+                        tileList.Add(new TileSingle(x, y, false));
+                        Debug.Log("x:" + x + " y:" + y + " tile: (null)");
+                    }
+                }
+            }        
+        }
         public void SwitchRight()
         {
             mapManager.SwitchRight();
