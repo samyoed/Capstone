@@ -73,65 +73,121 @@ namespace ballGame
 
 
                 float playerXPos = player.position.x - playerOffset.x;
-                int notEmptyIdxRight = Mathf.RoundToInt(playerXPos/2) + 28;
-                int notEmptyIdxLeft = notEmptyIdxRight;
+                float playerYPos = player.position.y - playerOffset.y;
+                int playerXCoord = Mathf.RoundToInt(playerXPos/2) + 28;
+                int playerYCoord = Mathf.RoundToInt(playerYPos/2) + 18;
 
 
-
-
-                print("unedited" + notEmptyIdxRight);
-
-                int rightCount = 0;
-                int leftCount = 0;
-                bool useRight = true;
-                bool specialCase = false;
-                while(currentSegment.floorNotEmpty[notEmptyIdxRight])
+                if(currentSegment.tileArr[playerXCoord, playerYCoord])
                 {
-                    if(notEmptyIdxRight >= 55)
+                    int vacantUp = playerYCoord, vacantDown = playerYCoord;
+                    int countUp = 0, countDown = 0;
+                    bool specialCase = false;
+                    bool useUp = false;
+
+                    while(currentSegment.tileArr[playerXCoord,vacantDown]) //traversing down
                     {
-                        useRight = false;
-                        specialCase = true;
-                        break;
+                        if(vacantDown == 0)
+                        {
+                            useUp = true;
+                            specialCase = true;
+                            break;
+                        }
+                        countDown++;
+                        vacantDown--;
+                    }
+                    while(currentSegment.tileArr[playerXCoord,vacantUp]) //traversing up
+                    {
+                        if(vacantUp == 35)
+                        {
+                            useUp = false;
+                            specialCase = true;
+                            break;
+                        }
+                        countUp++;
+                        vacantUp++;
+                        print(vacantUp);
                     }
 
-                    rightCount++;
-                    notEmptyIdxRight++;
-                }
-                while(currentSegment.floorNotEmpty[notEmptyIdxLeft])
-                {
-                    if(notEmptyIdxLeft <= 0)
+
+                    if(!specialCase)
                     {
-                        useRight = true;
-                        specialCase = true;
-                        break;
+                        if(countDown > countUp)
+                            useUp = false;
+                        else
+                            useUp = true;
                     }
-                    leftCount++;
-                    notEmptyIdxLeft--;
-                }
-                if(!specialCase)
-                {
-                    if(rightCount < leftCount)
-                        useRight = true;
+                    if(useUp)
+                        playerYPos = (vacantUp - 16) * 2;
                     else
-                        useRight = false;
+                        playerYPos = (vacantDown - 20) * 2;
+
+
+
                 }
-                if(useRight)
-                    playerXPos = (notEmptyIdxRight - 28) * 2;
-                else
-                    playerXPos = (notEmptyIdxLeft - 28) * 2;
-
-
-                print("edited" + playerXPos + "\nleft" + notEmptyIdxLeft + "  right" + notEmptyIdxRight);
-
-
-
-                Vector3 tempPos =  new Vector3(player.position.x - playerOffset.x + cameraTransform.position.x,
-                                                        player.position.y - playerOffset.y + cameraTransform.position.y,
-                                                        player.position.z);
+                player.transform.position = new Vector2(playerXPos + cameraTransform.position.x,
+                                                        playerYPos + cameraTransform.position.y);
                 
-                player.transform.position = new Vector3(playerXPos + cameraTransform.position.x,
-                                                        player.position.y - playerOffset.y + cameraTransform.position.y,
-                                                        player.position.z);
+                
+                //int notEmptyIdxRight = Mathf.RoundToInt(playerXPos/2) + 28;
+                // int notEmptyIdxLeft = notEmptyIdxRight;
+
+
+
+
+                // print("unedited" + notEmptyIdxRight);
+
+                // int rightCount = 0;
+                // int leftCount = 0;
+                // bool useRight = true;
+                // bool specialCase = false;
+                // while(currentSegment.floorNotEmpty[notEmptyIdxRight])
+                // {
+                //     if(notEmptyIdxRight >= 55)
+                //     {
+                //         useRight = false;
+                //         specialCase = true;
+                //         break;
+                //     }
+
+                //     rightCount++;
+                //     notEmptyIdxRight++;
+                // }
+                // while(currentSegment.floorNotEmpty[notEmptyIdxLeft])
+                // {
+                //     if(notEmptyIdxLeft <= 0)
+                //     {
+                //         useRight = true;
+                //         specialCase = true;
+                //         break;
+                //     }
+                //     leftCount++;
+                //     notEmptyIdxLeft--;
+                // }
+                // if(!specialCase)
+                // {
+                //     if(rightCount < leftCount)
+                //         useRight = true;
+                //     else
+                //         useRight = false;
+                // }
+                // if(useRight)
+                //     playerXPos = (notEmptyIdxRight - 28) * 2;
+                // else
+                //     playerXPos = (notEmptyIdxLeft - 28) * 2;
+
+
+                // print("edited" + playerXPos + "\nleft" + notEmptyIdxLeft + "  right" + notEmptyIdxRight);
+
+
+
+                // Vector3 tempPos =  new Vector3(player.position.x - playerOffset.x + cameraTransform.position.x,
+                //                                         player.position.y - playerOffset.y + cameraTransform.position.y,
+                //                                         player.position.z);
+                
+                // player.transform.position = new Vector3(playerXPos + cameraTransform.position.x,
+                //                                         player.position.y - playerOffset.y + cameraTransform.position.y,
+                //                                         player.position.z);
 
             }
             playerOffset = cameraTransform.position;

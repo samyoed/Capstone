@@ -99,6 +99,7 @@ namespace ballGame
 
 
         public Vector2 lockedDashDirec;
+        int tempAttackInt = 0;
 
 
         void Awake()
@@ -142,11 +143,11 @@ namespace ballGame
             if(!isFacingRight)
                 transform.localScale = new Vector3(-currentScale.x, currentScale.y, currentScale.z);
 
-            if(hasSpecial)
-               _PartSys.Play();
+            // if(hasSpecial)
+            //    _PartSys.Play();
 
             if(currentDashCount == 0)
-                _Sr.color = Color.cyan;
+                _Sr.color = Color.grey;
             else 
                 _Sr.color = Color.white;
 
@@ -154,6 +155,9 @@ namespace ballGame
             input = new Vector2(playInput.GetAxisRaw("Horizontal"), playInput.GetAxisRaw("Vertical"));
 
 //-----------------------------STATE MACHINE-------------------------------------------
+
+            
+
             switch(phase)
             {   //----------------------------------ATTACKING---------------------------
                 case state.ATTACK:
@@ -169,6 +173,8 @@ namespace ballGame
                         //currentDashCount--;
                         _PlayerCircColl.enabled = true;
                         _PlayerCapsuleColl.enabled = false;
+                        tempAttackInt = 0;
+
                         break;
                     }
                     break;
@@ -222,26 +228,55 @@ namespace ballGame
 
                         //for 
                         if(roundedInput.x == 0 && roundedInput.y == 0 && isFacingRight)
+                        {
                             circCollRot.z = -90f;       //if no direction inputted
+                            tempAttackInt = 3;
+                        }
                         else if(roundedInput.x == 0 && roundedInput.y == 0 && !isFacingRight)
+                        {    
                             circCollRot.z = 90f;
+                            tempAttackInt = 3;
+                        }
                         else if(roundedInput.x == 0 && roundedInput.y == 1)
+                        {
                             circCollRot.z = 0f;          //if up input
+                            tempAttackInt = 1;
+                        }    
                         else if(roundedInput.x == 1 && roundedInput.y == 1)
+                        {
                             circCollRot.z = -45f;     //if up right input
+                            tempAttackInt = 2;
+                        }
                         else if(roundedInput.x == 1 && roundedInput.y == 0)
+                        {
                             circCollRot.z = -90f;      //if right input
+                            tempAttackInt = 3;
+                        }
                         else if(roundedInput.x == 1 && roundedInput.y == -1)
+                        {
                             circCollRot.z = -135f;   //if down right input
+                            tempAttackInt = 4;
+                        }
                         else if(roundedInput.x == 0 && roundedInput.y == -1)
+                        {
                             circCollRot.z = -180f;        //if down input
+                            tempAttackInt = 5;
+                        }
                         else if(roundedInput.x == -1 && roundedInput.y == -1)
+                        {
                             circCollRot.z = -225f;    //if down left input
+                            tempAttackInt = 4;
+                        }
                         else if(roundedInput.x == -1 && roundedInput.y == 0)
+                        {
                             circCollRot.z = -270f;        //if left input
+                            tempAttackInt = 3;
+                        }
                         else if(roundedInput.x == -1 && roundedInput.y == 1)
+                        {
                             circCollRot.z = -315f;      //if up left input
-
+                            tempAttackInt = 2;
+                        }
                         _PlayerCircColl.transform.eulerAngles = circCollRot;
                         _PlayerCapsuleColl.enabled = true;
                         _PlayerCircColl.enabled = false;
@@ -279,6 +314,10 @@ namespace ballGame
 
 //----------------------------ANIMATIONS-------------------------------------------------
             _animator.SetFloat("Speed", Mathf.Abs(input.x));
+            _animator.SetFloat("Y Velocity", velocity.y);
+            _animator.SetBool("OnGround", _Controller.collisions.below);
+            _animator.SetInteger("AtkDirection", tempAttackInt);
+
 
 
 

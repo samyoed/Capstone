@@ -19,7 +19,7 @@ namespace ballGame
         public GameObject quad1;
         public GameObject quad2;
 
-        public ParticleSystem partSys;
+        //public ParticleSystem partSys;
         public Rigidbody2D rb;
         public GameManager gameManager;
         public ScoreManager scoreManager;
@@ -43,7 +43,7 @@ namespace ballGame
 
        void Start()
        {
-            partSys = gameObject.transform.GetChild(0).GetComponent<ParticleSystem>();
+            //partSys = gameObject.transform.GetChild(0).GetComponent<ParticleSystem>();
             rb = gameObject.GetComponent<Rigidbody2D>();
             currentPlayerList = new List<Transform>();
 
@@ -67,25 +67,25 @@ namespace ballGame
         }
 
 
-        void OnCollisionEnter2D (Collision2D coll)
-        {
-            if(coll.gameObject.CompareTag("Goal"))
-            {
-                bool isTeamOne;
-                isTeamOne = coll.transform.GetComponent<GoalScript>().isTeam1;
+        // void OnCollisionEnter2D (Collision2D coll)
+        // {
+        //     if(coll.gameObject.CompareTag("Goal"))
+        //     {
+        //         bool isTeamOne;
+        //         isTeamOne = coll.transform.GetComponent<GoalScript>().isTeam1;
 
-                if(isTeamOne)
-                {
-                    print("we goin?");
-                    gameManager.team1Health -= vel * healthMult;
-                }
-                else
-                    gameManager.team2Health -= vel * healthMult;
+        //         if(isTeamOne)
+        //         {
+        //             print("we goin?");
+        //             gameManager.team1Health -= vel * healthMult;
+        //         }
+        //         else
+        //             gameManager.team2Health -= vel * healthMult;
 
                 
-                StartCoroutine(particles(isTeamOne));
-            }
-        }
+        //         StartCoroutine(particles(isTeamOne));
+        //     }
+        // }
    
         void OnTriggerStay2D(Collider2D other)
         {
@@ -161,50 +161,50 @@ namespace ballGame
             }
         }
 
-        IEnumerator particles(bool isTeam1)
-        {
-            partSys.Play();
-            if(gameManager.team1Health < 0 || gameManager.team2Health < 0)
-            {
-                scoreManager.reset();
-                timeSlowTime = 0.004f;
-            }
+        // IEnumerator particles(bool isTeam1)
+        // {
+        //     //partSys.Play();
+        //     if(gameManager.team1Health < 0 || gameManager.team2Health < 0)
+        //     {
+        //         scoreManager.reset();
+        //         timeSlowTime = 0.004f;
+        //     }
 
-            //DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, .1f, .1f);
+        //     //DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, .1f, .1f);
 
-                if(isTeam1)
-                {
-                    //quad1.SetActive(true);
-                    quad1.GetComponent<shlab2>().reset();
-                    quad1.GetComponent<shlab2>().ballVelTemp = vel/100;
-                    quad1.GetComponent<shlab2>().isHit = true;
-                }
-                else
-                {
-                    //quad2.SetActive(true);
-                    quad2.GetComponent<shlab2>().reset();
-                    quad2.GetComponent<shlab2>().ballVelTemp = vel/100;
-                    quad2.GetComponent<shlab2>().isHit = true;
-                }
+        //         if(isTeam1)
+        //         {
+        //             //quad1.SetActive(true);
+        //             quad1.GetComponent<shlab2>().reset();
+        //             quad1.GetComponent<shlab2>().ballVelTemp = vel/100;
+        //             quad1.GetComponent<shlab2>().isHit = true;
+        //         }
+        //         else
+        //         {
+        //             //quad2.SetActive(true);
+        //             quad2.GetComponent<shlab2>().reset();
+        //             quad2.GetComponent<shlab2>().ballVelTemp = vel/100;
+        //             quad2.GetComponent<shlab2>().isHit = true;
+        //         }
             
-            yield return new WaitForSeconds(timeSlowTime*vel);
-            partSys.Stop();
-            //DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, 1f, .1f);
+        //     yield return new WaitForSeconds(timeSlowTime*vel);
+        //     partSys.Stop();
+        //     //DOTween.To(()=>Time.timeScale, x=>Time.timeScale = x, 1f, .1f);
 
             
-                if(isTeam1)
-                {
-                    //quad1.SetActive(false);
-                    quad1.GetComponent<shlab2>().reset();
-                    quad1.GetComponent<shlab2>().isHit = false;
-                }
-                else
-                {
-                    //quad2.SetActive(false);
-                    quad2.GetComponent<shlab2>().reset();
-                    quad2.GetComponent<shlab2>().isHit = false;
-                }
+        //         if(isTeam1)
+        //         {
+        //             //quad1.SetActive(false);
+        //             quad1.GetComponent<shlab2>().reset();
+        //             quad1.GetComponent<shlab2>().isHit = false;
+        //         }
+        //         else
+        //         {
+        //             //quad2.SetActive(false);
+        //             quad2.GetComponent<shlab2>().reset();
+        //             quad2.GetComponent<shlab2>().isHit = false;
+        //         }
             
-        }
+        // }
     }
 }

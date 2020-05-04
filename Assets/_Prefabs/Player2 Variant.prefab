@@ -59,7 +59,7 @@ PrefabInstance:
     - target: {fileID: 3071533311511036696, guid: 870952385131d1948bef3251411edc3c,
         type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 14.230769
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3071533311511036696, guid: 870952385131d1948bef3251411edc3c,
         type: 3}
@@ -70,6 +70,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.y
       value: 9.538462
+      objectReference: {fileID: 0}
+    - target: {fileID: 3071533311511036696, guid: 870952385131d1948bef3251411edc3c,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3071533311511036696, guid: 870952385131d1948bef3251411edc3c,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.010587454
+      objectReference: {fileID: 0}
+    - target: {fileID: 3071533311511036696, guid: 870952385131d1948bef3251411edc3c,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 3.993618
+      objectReference: {fileID: 0}
+    - target: {fileID: 3071533311511036696, guid: 870952385131d1948bef3251411edc3c,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.005402148
+      objectReference: {fileID: 0}
+    - target: {fileID: 3071533311511036696, guid: 870952385131d1948bef3251411edc3c,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 2.890306
       objectReference: {fileID: 0}
     - target: {fileID: 3071533311511036697, guid: 870952385131d1948bef3251411edc3c,
         type: 3}
@@ -104,7 +129,7 @@ PrefabInstance:
     - target: {fileID: 3071533311511036701, guid: 870952385131d1948bef3251411edc3c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3071533311511036701, guid: 870952385131d1948bef3251411edc3c,
         type: 3}
@@ -244,7 +269,7 @@ PrefabInstance:
     - target: {fileID: 3071533311511036702, guid: 870952385131d1948bef3251411edc3c,
         type: 3}
       propertyPath: attackTimerMax
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3071533311511036702, guid: 870952385131d1948bef3251411edc3c,
         type: 3}
@@ -345,7 +370,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -3727993747073374944, guid: a2dc0faf05b46db45abd879043080573,
+      objectReference: {fileID: 990275489075577473, guid: a69fa1709cfcbd14980d061671341ec3,
         type: 3}
     - target: {fileID: 6684352105122937169, guid: 870952385131d1948bef3251411edc3c,
         type: 3}

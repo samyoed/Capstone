@@ -32,6 +32,7 @@ namespace ballGame
         BoundsInt bounds;
         TileBase[] allTiles;
         public List<TileSingle> tileList = new List<TileSingle>();
+        public bool[,] tileArr = new bool[56,36];
 
 
 
@@ -44,8 +45,8 @@ namespace ballGame
             mapManager = GameObject.FindWithTag("Map Manager").GetComponent<MapManager>();
             gameManager = GameObject.FindWithTag("Game Manager").GetComponent<GameManagerNew>();
             tilemap = GetComponent<Tilemap>();
-            bounds = tilemap.cellBounds;
-            allTiles = tilemap.GetTilesBlock(bounds);
+            
+            
 
             GetTiles(tileList);
         }
@@ -70,6 +71,8 @@ namespace ballGame
         void GetTiles(List<TileSingle> tileList)
         {
             tilemap.CompressBounds();
+            bounds = tilemap.cellBounds;
+            allTiles = tilemap.GetTilesBlock(bounds);
 
             for (int x = 0; x < bounds.size.x; x++) 
             {
@@ -78,13 +81,15 @@ namespace ballGame
                     TileBase tile = allTiles[x + y * bounds.size.x];
                     if (tile != null) 
                     {
-                        tileList.Add(new TileSingle(x, y, true));
-                        Debug.Log("x:" + x + " y:" + y + " tile:" + tile.name);
+                        //tileList.Add(new TileSingle(x, y, true));
+                        Debug.Log(this.name +"x:" + x + " y:" + y + " tile:" + tile.name);
+                        tileArr[x,y] = true;
                     }
                     else
                     { 
-                        tileList.Add(new TileSingle(x, y, false));
-                        Debug.Log("x:" + x + " y:" + y + " tile: (null)");
+                        //tileList.Add(new TileSingle(x, y, false));
+                        Debug.Log(this.name + "x:" + x + " y:" + y + " tile: (null)");
+                        tileArr[x,y] = false;
                     }
                 }
             }        
