@@ -40,12 +40,17 @@ namespace ballGame
 
         public float healthMult;
 
+        bool hasSwappedBlack = false;
+        bool hasSwappedWhite = false;
+        Renderer renderer;
 
-       void Start()
-       {
+
+        void Start()
+        {
             //partSys = gameObject.transform.GetChild(0).GetComponent<ParticleSystem>();
             rb = gameObject.GetComponent<Rigidbody2D>();
             currentPlayerList = new List<Transform>();
+            renderer = GetComponent<Renderer>();
 
             //gameManager = GameObject.FindWithTag("Game Manager").GetComponent<GameManager>();
             //scoreManager = GameObject.FindWithTag("Score Manager").GetComponent<ScoreManager>();
@@ -56,7 +61,25 @@ namespace ballGame
             //     if(child != this.transform)
             //         currentPlayerList.Add(child);
             // }
-       }
+        }
+
+        void Update()
+        {
+            if(transform.position.x < 0 && !hasSwappedBlack)
+            {
+
+                renderer.material.DOColor(Color.black, .3f);
+                hasSwappedBlack = true;
+                hasSwappedWhite = false;
+
+            }
+            if(transform.position.x > 0 && !hasSwappedWhite)
+            {
+                renderer.material.DOColor(Color.white, .3f);
+                hasSwappedBlack = false;
+                hasSwappedWhite = true;
+            }
+        }
 
         void FixedUpdate()
         {
@@ -66,26 +89,6 @@ namespace ballGame
            //closestPlayer = GetClosestPlayer(currentPlayerList);
         }
 
-
-        // void OnCollisionEnter2D (Collision2D coll)
-        // {
-        //     if(coll.gameObject.CompareTag("Goal"))
-        //     {
-        //         bool isTeamOne;
-        //         isTeamOne = coll.transform.GetComponent<GoalScript>().isTeam1;
-
-        //         if(isTeamOne)
-        //         {
-        //             print("we goin?");
-        //             gameManager.team1Health -= vel * healthMult;
-        //         }
-        //         else
-        //             gameManager.team2Health -= vel * healthMult;
-
-                
-        //         StartCoroutine(particles(isTeamOne));
-        //     }
-        // }
    
         void OnTriggerStay2D(Collider2D other)
         {

@@ -96,10 +96,13 @@ namespace ballGame
         private SpriteRenderer _Sr;
         public ParticleSystem _PartSys;
         public GameObject _Ball;
+        public GameManagerNew _gameManager;
 
 
         public Vector2 lockedDashDirec;
         int tempAttackInt = 0;
+
+        public bool canMove;
 
 
         void Awake()
@@ -117,6 +120,7 @@ namespace ballGame
             _PartSys = transform.GetChild(2).gameObject.GetComponent<ParticleSystem>();
             _Ball = GameObject.Find("Ball");
             _animator = GetComponent<Animator>();
+            _gameManager = GameObject.FindWithTag("Game Manager").GetComponent<GameManagerNew>();
 
             gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
             normGravTemp = gravity;
@@ -133,6 +137,14 @@ namespace ballGame
         void Update()
         {
 //-----------------------------RUN BEFORE EVERY FRAME----------------------------------
+            if(_gameManager.gameState == GameManagerNew.GameState.PAUSED ||
+               _gameManager.gameState == GameManagerNew.GameState.COUNTING ||
+               _gameManager.gameState == GameManagerNew.GameState.GAMEOVER)
+                canMove = false;
+            else
+                canMove = true;
+
+
             if(input.x < -0.01)
                 isFacingRight = false;
             else if(input.x > 0.01)
@@ -152,12 +164,10 @@ namespace ballGame
                 _Sr.color = Color.white;
 
             //input
-            input = new Vector2(playInput.GetAxisRaw("Horizontal"), playInput.GetAxisRaw("Vertical"));
+            if(canMove)
+                input = new Vector2(playInput.GetAxisRaw("Horizontal"), playInput.GetAxisRaw("Vertical"));
 
 //-----------------------------STATE MACHINE-------------------------------------------
-
-            
-
             switch(phase)
             {   //----------------------------------ATTACKING---------------------------
                 case state.ATTACK:
@@ -209,13 +219,13 @@ namespace ballGame
                 //-----------------------------------DEFAULT-----------------------------
                 case state.DEFAULT:
                      //dashes when button is pressed and there are dashes available
-                    if(Input.GetButtonDown(actionInput) && currentDashCount > 0)
+                    if(Input.GetButtonDown(actionInput) && currentDashCount > 0 && canMove)
                     {
                         lockedDashDirec = input.normalized;
                         phase = state.DASH;
                         dashTimer = 0;
                     }
-                    if(Input.GetButtonDown(attackInput))
+                    if(Input.GetButtonDown(attackInput) && canMove)
                     {
                         lockedDashDirec = input.normalized;
                         phase = state.ATTACK;
@@ -281,7 +291,7 @@ namespace ballGame
                         _PlayerCapsuleColl.enabled = true;
                         _PlayerCircColl.enabled = false;
                     }
-                    if(Input.GetButtonDown(specialInput) && hasSpecial)
+                    if(Input.GetButtonDown(specialInput) && hasSpecial && canMove)
                     {
                         phase = state.SPECIAL;
                         specialTimer = 0;
@@ -297,7 +307,7 @@ namespace ballGame
                                                       ref velocityXSmoothing,
                                                      (_Controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
 
-                    velocity.y += gravity *(1/60f);
+                    velocity.y += gravity *(1/60f)*Time.timeScale;
                 break;
             }
 
@@ -310,7 +320,7 @@ namespace ballGame
             }
             
                 
-            _Controller.Move(velocity *(1/60f));
+            _Controller.Move(velocity *(1/60f)*Time.timeScale);
 
 //----------------------------ANIMATIONS-------------------------------------------------
             _animator.SetFloat("Speed", Mathf.Abs(input.x));

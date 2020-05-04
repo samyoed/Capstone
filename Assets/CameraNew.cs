@@ -20,7 +20,7 @@ namespace ballGame
         }
         void Start()
         {
-           
+            black.DOFade(0, 1);
         }
     
         public void UpdatePosition()
