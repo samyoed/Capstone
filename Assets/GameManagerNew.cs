@@ -33,6 +33,10 @@ namespace ballGame
 
             // foreach(Room room in mapObject)
             //     mapList.Add(room);
+            foreach(string str in Input.GetJoystickNames())
+            {
+                print(str);
+            }
             
         }
 
