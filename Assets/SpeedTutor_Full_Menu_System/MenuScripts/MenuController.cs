@@ -4,9 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class MenuController : MonoBehaviour
 {
+
+    public Image black;
+
     #region Default Values
     [Header("Default Menu Values")]
     [SerializeField] private float defaultBrightness;
@@ -37,6 +41,8 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject loadGameDialog;
     #endregion
 
+    
+
     #region Slider Linking
     [Header("Menu Sliders")]
     [SerializeField] private Text controllerSenText;
@@ -57,6 +63,7 @@ public class MenuController : MonoBehaviour
     private void Start()
     {
         menuNumber = 1;
+        black.DOFade(0,2);
     }
     #endregion
 
@@ -143,7 +150,7 @@ public class MenuController : MonoBehaviour
             menuNumber = 2;
         }
 	
-		if(buttonType == "LoadGame")
+		if(buttonType == "HowToPlay")
 		{
             menuDefaultCanvas.SetActive(false);
             loadGameDialog.SetActive(true);
@@ -256,12 +263,16 @@ public class MenuController : MonoBehaviour
     #region Dialog Options
     public void ClickNewGameDialog(string ButtonType)
     {
-        if (ButtonType == "Yes")
+        if (ButtonType == "1")
         {
-            SceneManager.LoadScene(level);
+            SceneManager.LoadScene("RoomTest");
         }
 
-        if (ButtonType == "No")
+        if (ButtonType == "2")
+        {
+            SceneManager.LoadScene("RoomTest");
+        }
+        if(ButtonType == "Back")
         {
             GoBackToMainMenu();
         }
@@ -340,4 +351,6 @@ public class MenuController : MonoBehaviour
         GoBackToMainMenu();
     }
     #endregion
+
+    
 }

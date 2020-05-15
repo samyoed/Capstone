@@ -82,13 +82,13 @@ namespace ballGame
                     if (tile != null) 
                     {
                         //tileList.Add(new TileSingle(x, y, true));
-                        Debug.Log(this.name +"x:" + x + " y:" + y + " tile:" + tile.name);
+                        //Debug.Log(this.name +"x:" + x + " y:" + y + " tile:" + tile.name);
                         tileArr[x,y] = true;
                     }
                     else
                     { 
                         //tileList.Add(new TileSingle(x, y, false));
-                        Debug.Log(this.name + "x:" + x + " y:" + y + " tile: (null)");
+                        //Debug.Log(this.name + "x:" + x + " y:" + y + " tile: (null)");
                         tileArr[x,y] = false;
                     }
                 }

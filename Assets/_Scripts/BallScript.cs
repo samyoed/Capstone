@@ -140,6 +140,14 @@ namespace ballGame
             return bestTarget;
         }
 
+
+        void OnCollisionEnter2D(Collision2D other)
+        {
+            if(rb.velocity.y > 5)
+            SoundManager.PlaySound("bounce");
+        }
+
+
         void OnTriggerExit2D (Collider2D other)
         {  
             if(other.gameObject.CompareTag("Weapon"))

@@ -41,12 +41,12 @@ public class shlab2 : MonoBehaviour
 
             transform.position = Vector3.Lerp(new Vector3(startPos.x + offset, startPos.y, startPos.z), startPos, t);
 
-            float opEdit;
+            // float opEdit;
 
-            opEdit = Mathf.Lerp(0, ballVelTemp, t);
+            // opEdit = Mathf.Lerp(0, ballVelTemp, t);
             
 
-            rend.material.SetFloat("_Opacity", opEdit);
+            // rend.material.SetFloat("_Opacity", opEdit);
             
         }else
         {
@@ -61,12 +61,12 @@ public class shlab2 : MonoBehaviour
             //changing position
             transform.position = Vector3.Lerp(startPos, new Vector3(startPos.x + offset, startPos.y, startPos.z), t);
 
-            //changing opacity
-            float opEdit;
+            // //changing opacity
+            // float opEdit;
 
-            opEdit = Mathf.Lerp(ballVelTemp, 0, t);
+            // opEdit = Mathf.Lerp(ballVelTemp, 0, t);
 
-            rend.material.SetFloat("_Opacity", opEdit);
+            // rend.material.SetFloat("_Opacity", opEdit);
         }
     }
     public void reset()

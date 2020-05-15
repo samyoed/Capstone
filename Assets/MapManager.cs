@@ -17,6 +17,7 @@ namespace ballGame
         public CameraNew virtCam;
         public Vector3 playerOffset;
         public ProgressSlider progressSlider;
+        public BallScript ball;
 
         public int currentIndex;
         int mapObjectIdx = 0;
@@ -68,6 +69,8 @@ namespace ballGame
         }
         void PlayerTeleport()
         {
+
+
             foreach(Transform player in playerList)
             {
 
@@ -121,76 +124,25 @@ namespace ballGame
                         playerYPos = (vacantUp - 16) * 2;
                     else
                         playerYPos = (vacantDown - 20) * 2;
-
-
-
                 }
                 player.transform.position = new Vector2(playerXPos + cameraTransform.position.x,
                                                         playerYPos + cameraTransform.position.y);
                 
                 
-                //int notEmptyIdxRight = Mathf.RoundToInt(playerXPos/2) + 28;
-                // int notEmptyIdxLeft = notEmptyIdxRight;
-
-
-
-
-                // print("unedited" + notEmptyIdxRight);
-
-                // int rightCount = 0;
-                // int leftCount = 0;
-                // bool useRight = true;
-                // bool specialCase = false;
-                // while(currentSegment.floorNotEmpty[notEmptyIdxRight])
-                // {
-                //     if(notEmptyIdxRight >= 55)
-                //     {
-                //         useRight = false;
-                //         specialCase = true;
-                //         break;
-                //     }
-
-                //     rightCount++;
-                //     notEmptyIdxRight++;
-                // }
-                // while(currentSegment.floorNotEmpty[notEmptyIdxLeft])
-                // {
-                //     if(notEmptyIdxLeft <= 0)
-                //     {
-                //         useRight = true;
-                //         specialCase = true;
-                //         break;
-                //     }
-                //     leftCount++;
-                //     notEmptyIdxLeft--;
-                // }
-                // if(!specialCase)
-                // {
-                //     if(rightCount < leftCount)
-                //         useRight = true;
-                //     else
-                //         useRight = false;
-                // }
-                // if(useRight)
-                //     playerXPos = (notEmptyIdxRight - 28) * 2;
-                // else
-                //     playerXPos = (notEmptyIdxLeft - 28) * 2;
-
-
-                // print("edited" + playerXPos + "\nleft" + notEmptyIdxLeft + "  right" + notEmptyIdxRight);
-
-
-
-                // Vector3 tempPos =  new Vector3(player.position.x - playerOffset.x + cameraTransform.position.x,
-                //                                         player.position.y - playerOffset.y + cameraTransform.position.y,
-                //                                         player.position.z);
                 
-                // player.transform.position = new Vector3(playerXPos + cameraTransform.position.x,
-                //                                         player.position.y - playerOffset.y + cameraTransform.position.y,
-                //                                         player.position.z);
 
             }
             playerOffset = cameraTransform.position;
+
+
+            if(ball.transform.position.x > (56 + currentSegment.transform.position.x) || 
+               ball.transform.position.x < (-56 + currentSegment.transform.position.x))
+            {
+                ball.transform.position = new Vector2(0 + currentSegment.transform.position.x, 20 + currentSegment.transform.position.y);
+            }
+
+
+
             print("teleport");
         }
         //for the small delay in switching rooms

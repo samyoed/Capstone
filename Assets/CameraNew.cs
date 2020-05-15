@@ -11,6 +11,7 @@ namespace ballGame
     {
         public MapManager mapManager;
         public Image black;
+        public GameObject grey;
         public TextMeshProUGUI rightScoreText;
         public TextMeshProUGUI leftScoreText;
     
@@ -31,12 +32,21 @@ namespace ballGame
             transform.DOLocalMove(newPosition, .75f);
         }
 
-        public void FadeToBlack()
-        {
-            black.DOFade(255, 200);
-            rightScoreText.DOFade(255,200);
-            leftScoreText.DOFade(255, 200);
+        // public void FadeToBlack()
+        // {
+        //     black.DOFade(255, 200);
+        //     rightScoreText.DOFade(255, 200);
+        //     leftScoreText.DOFade(255, 200);
 
+        // }
+
+
+        public IEnumerator FadeToGrey()
+        {
+            yield return new WaitForSeconds(.1f);
+            //black.DOFade(1,200);
+            grey.SetActive(true);
+            DOTween.To(()=> grey.GetComponent<CanvasGroup>().alpha, x=> grey.GetComponent<CanvasGroup>().alpha = x, 1, 2);
         }
     }
 }

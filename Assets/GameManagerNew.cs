@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace ballGame
 {
@@ -17,6 +18,7 @@ namespace ballGame
         public TextMeshProUGUI leftScoreText;
         public TextMeshProUGUI countDownText;
         public CameraNew virtCam;
+        public GameObject whiteWinText, blackWinText;
         int mapObjectIdx = 0;
 
         public enum GameState {COUNTING, PAUSED, PLAYING, GAMEOVER};
@@ -43,6 +45,10 @@ namespace ballGame
         // Update is called once per frame
         void Update()
         {
+            if(Input.GetKey(KeyCode.R))
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                
+
             switch(gameState)
             {
                 case GameState.COUNTING:
@@ -62,24 +68,30 @@ namespace ballGame
         public void RightScore()
         {
             teamRightScore++;
-            Camera.main.GetComponent<CameraNew>().FadeToBlack();
-            mapManager.initMap();
-            mapObject = mapManager.mapObject;
-            Vector3 mapPosEdit = mapManager.mapObject.transform.position;
-            Vector3 mapAdd = new Vector3(112, 0, 0);
-            mapManager.mapObject.transform.position = mapPosEdit + mapAdd;
-            virtCam.UpdatePosition();
+            //Camera.main.GetComponent<CameraNew>().FadeToBlack();
+            // mapManager.initMap();
+            // mapObject = mapManager.mapObject;
+            // Vector3 mapPosEdit = mapManager.mapObject.transform.position;
+            // Vector3 mapAdd = new Vector3(112, 0, 0);
+            // mapManager.mapObject.transform.position = mapPosEdit + mapAdd;
+            // virtCam.UpdatePosition();
+            blackWinText.SetActive(true);
+
+            StartCoroutine(virtCam.FadeToGrey());
+            
         }
         public void LeftScore()
         {
             teamLeftScore++;
-            Camera.main.GetComponent<CameraNew>().FadeToBlack();
-            mapManager.initMap();
-            mapObject = mapManager.mapObject;
-            Vector3 mapPosEdit = mapManager.mapObject.transform.position;
-            Vector3 mapAdd = new Vector3(-112, 0, 0);
-            mapManager.mapObject.transform.position = mapPosEdit + mapAdd;
-            virtCam.UpdatePosition();
+            //Camera.main.GetComponent<CameraNew>().FadeToBlack();
+            //mapManager.initMap();
+            //mapObject = mapManager.mapObject;
+            //Vector3 mapPosEdit = mapManager.mapObject.transform.position;
+            //Vector3 mapAdd = new Vector3(-112, 0, 0);
+            //mapManager.mapObject.transform.position = mapPosEdit + mapAdd;
+            //virtCam.UpdatePosition();
+            whiteWinText.SetActive(true);
+            StartCoroutine(virtCam.FadeToGrey());
             
 
         }

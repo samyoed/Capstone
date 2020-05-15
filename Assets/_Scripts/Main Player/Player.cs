@@ -221,12 +221,14 @@ namespace ballGame
                      //dashes when button is pressed and there are dashes available
                     if(Input.GetButtonDown(actionInput) && currentDashCount > 0 && canMove)
                     {
+                        SoundManager.PlaySound("jump");
                         lockedDashDirec = input.normalized;
                         phase = state.DASH;
                         dashTimer = 0;
                     }
                     if(Input.GetButtonDown(attackInput) && canMove)
                     {
+                        SoundManager.PlaySound("hit");
                         lockedDashDirec = input.normalized;
                         phase = state.ATTACK;
                         attackTimer = 0;
